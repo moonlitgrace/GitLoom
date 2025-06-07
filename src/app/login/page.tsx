@@ -12,7 +12,9 @@ export default function Page() {
   return (
     <div className="grid min-h-dvh place-items-center">
       <div className="flex w-full max-w-sm flex-col gap-4">
-        <GitloomIcon className="size-10" />
+        <Link href={'/'} className="w-max">
+          <GitloomIcon className="size-10" />
+        </Link>
         <div className="flex flex-col gap-2">
           <h4 className="text-4xl font-black">Login</h4>
           <span className="text-muted-foreground text-sm">
