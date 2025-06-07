@@ -8,19 +8,21 @@ export default function Page() {
     <div className="grid min-h-dvh place-items-center">
       <div className="flex w-full max-w-sm flex-col gap-4">
         <GitloomIcon className="size-10" />
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-2">
           <h4 className="text-4xl font-black">Login</h4>
-          <span className="text-muted-foreground text-sm">Git it. Loom it.</span>
+          <span className="text-muted-foreground text-sm">
+            Log in to weave content into your repo.
+          </span>
         </div>
         <Button size={'default'}>
           <GithubIcon className="size-5" />
-          Continue with Github
+          Login with Github
         </Button>
         <span className="text-muted-foreground text-center text-sm">
           (More platforms coming soon.)
         </span>
         <div className="mt-10 flex flex-col gap-2 text-sm">
-          <span>GitloomLabs &copy; 2025</span>
+          <span>GitloomLabs &copy; {new Date(Date.now()).getFullYear()}</span>
           <div className="text-muted-foreground flex items-center gap-2">
             <a
               href="https://github.com/GitloomLabs/Gitloom"
