@@ -10,8 +10,9 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="grid min-h-dvh place-items-center">
-      <div className="flex w-full max-w-sm flex-col gap-4">
+    <div className="flex min-h-dvh items-center justify-center gap-8">
+      <div className="h-80 w-40 rounded-l-2xl bg-[url(/images/auth-bg.jpg)] bg-cover bg-no-repeat"></div>
+      <div className="flex h-80 w-max flex-col gap-4">
         <Link href={'/'} className="w-max">
           <GitloomIcon className="size-10" />
         </Link>
@@ -25,10 +26,8 @@ export default function Page() {
           <GithubIcon className="size-5" />
           Login with Github
         </Button>
-        <span className="text-muted-foreground text-center text-sm">
-          (More platforms coming soon.)
-        </span>
-        <div className="mt-10 flex flex-col gap-2 text-sm">
+        <span className="text-muted-foreground text-sm">(More platforms coming soon.)</span>
+        <div className="mt-auto flex flex-col gap-2 text-sm">
           <span>GitloomLabs &copy; {new Date(Date.now()).getFullYear()}</span>
           <div className="text-muted-foreground flex items-center gap-2">
             <a
