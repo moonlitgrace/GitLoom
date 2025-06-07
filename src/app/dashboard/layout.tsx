@@ -1,4 +1,4 @@
-import DashboardHeader from "./_components/header";
+import DashboardHeader from './_components/header';
 
 export default function DashboardLayout({
   children,
@@ -8,9 +8,7 @@ export default function DashboardLayout({
   return (
     <main>
       <DashboardHeader />
-      <div className="p-4">
-        {children}
-      </div>
+      <div className="p-4">{children}</div>
     </main>
   );
 }
