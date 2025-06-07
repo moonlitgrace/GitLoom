@@ -1,6 +1,8 @@
+import GithubIcon from '@/components/icons/github';
 import GitloomIcon from '@/components/icons/gitloom';
-import GitloomTextIcon from '@/components/icons/gitloom-text';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { ChevronsUpDown, Plus } from 'lucide-react';
 import Link from 'next/link';
 
 export default function DashboardHeader() {
@@ -9,12 +11,22 @@ export default function DashboardHeader() {
       <nav className="flex items-center gap-2">
         <Link href={'/dashboard'} className="flex items-center gap-2">
           <GitloomIcon className="size-5" />
-          <GitloomTextIcon className="h-4 w-max" />
         </Link>
+        <span className="text-muted-foreground/50 text-xl">/</span>
+        <Button variant={'ghost'} className="gap-2">
+          <GithubIcon className="fill-foreground size-5" />
+          <span className="text-sm font-bold">gitloom-repo</span>
+          <ChevronsUpDown className="opacity-50" />
+        </Button>
       </nav>
-      <nav className="flex items-center gap-2">
-        <Button>New Post</Button>
-      </nav>
+      <div className="flex items-center gap-4">
+        <Button>
+          <Plus className="size-4" /> New One
+        </Button>
+        <Avatar>
+          <AvatarImage src={'https://github.com/moonlitgrace.png'} />
+        </Avatar>
+      </div>
     </header>
   );
 }
