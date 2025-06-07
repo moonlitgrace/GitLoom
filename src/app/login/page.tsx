@@ -1,3 +1,46 @@
+import GithubIcon from '@/components/icons/github';
+import GitloomIcon from '@/components/icons/gitloom';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+
 export default function Page() {
-  return <div>Login Page</div>;
+  return (
+    <div className="grid min-h-dvh place-items-center">
+      <div className="flex w-full max-w-sm flex-col gap-4">
+        <GitloomIcon className="size-10" />
+        <div className="flex flex-col">
+          <h4 className="text-2xl font-black">Get Started!</h4>
+          <span className="text-muted-foreground text-sm">Git it. Loom it.</span>
+        </div>
+        <Button size={'default'}>
+          <GithubIcon className="size-5" />
+          Continue with Github
+        </Button>
+        <span className="text-muted-foreground text-center text-sm">
+          (More platforms coming soon.)
+        </span>
+        <div className="flex flex-col gap-2 text-sm">
+          <span>GitloomLabs &copy; 2025</span>
+          <div className="text-muted-foreground flex items-center gap-2">
+            <a
+              href="https://github.com/GitloomLabs/Gitloom"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="hover:underline"
+            >
+              Github
+            </a>
+            -
+            <Link href={'/legal/privacy-policy'} className="hover:underline">
+              Privacy Policy
+            </Link>
+            -
+            <Link href={'/legal/terms-of-service'} className="hover:underline">
+              Terms of Service
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
