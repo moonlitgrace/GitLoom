@@ -24,7 +24,7 @@ export default function DashboardHeader() {
       <div className="flex items-center gap-4">
         <a href="https://github.com/GitloomLabs/Gitloom" target="_blank" rel="noreferrer noopener">
           <Button variant={'secondary'}>
-            <GithubIcon className="fill-foreground size-4" /> Star
+            <GithubIcon className="fill-muted-foreground size-4" /> Github
           </Button>
         </a>
         <Avatar>
