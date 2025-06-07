@@ -114,8 +114,13 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
+    /* NOTE: remove once figure out a perfect focus style */
+    outline: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
   }
+
   body {
     @apply bg-background text-foreground;
   }
