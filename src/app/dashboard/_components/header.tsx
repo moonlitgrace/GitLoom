@@ -1,4 +1,3 @@
-import GithubIcon from '@/components/icons/github';
 import GitloomIcon from '@/components/icons/gitloom';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -22,11 +21,7 @@ export default function DashboardHeader() {
         </Button>
       </nav>
       <div className="flex items-center gap-4">
-        <a href="https://github.com/GitloomLabs/Gitloom" target="_blank" rel="noreferrer noopener">
-          <Button variant={'secondary'}>
-            <GithubIcon className="fill-muted-foreground size-4" /> Github
-          </Button>
-        </a>
+        <Button variant={'secondary'}>Feedback</Button>
         <Avatar>
           <AvatarImage src={'https://github.com/moonlitgrace.png'} />
         </Avatar>
