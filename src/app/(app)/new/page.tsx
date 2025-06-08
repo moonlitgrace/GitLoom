@@ -8,16 +8,46 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Construction, Search } from 'lucide-react';
+import { auth } from '@/lib/auth';
+import datetime from '@/lib/date-time';
+import { Construction, Lock, Search } from 'lucide-react';
 import { Metadata } from 'next';
+
+interface Repo {
+  id: number;
+  name: string;
+  private: boolean;
+  updated_at: string;
+  html_url: string;
+}
 
 export const metadata: Metadata = {
   title: 'New Repo',
 };
 
-export default function Page() {
+export default async function Page() {
+  const session = await auth();
+  const repos = await fetch(
+    'https://api.github.com/user/repos?affiliation=owner&sort=updated&per_page=5',
+    {
+      headers: {
+        Authorization: `Bearer ${session?.accessToken}`,
+      },
+    },
+  )
+    .then((res) => res.json())
+    .then((data: Repo[]) =>
+      data.map((repo) => ({
+        id: repo.id,
+        name: repo.name,
+        private: repo.private,
+        updated_at: repo.updated_at,
+        html_url: repo.html_url,
+      })),
+    );
+
   return (
-    <div className="mt-10 space-y-8">
+    <div className="mx-auto mt-10 w-full max-w-5xl space-y-8">
       <div className="flex flex-col gap-2">
         <h3 className="text-4xl font-black">Let's do something new.</h3>
         <span className="text-muted-foreground text-sm">
@@ -44,12 +74,24 @@ export default function Page() {
             </InputRoot>
           </div>
           <div className="divide-y rounded-md border">
-            <div className="flex items-center gap-2 p-3">
-              <GithubIcon className="fill-muted-foreground size-5" />
-              <span className="text-sm font-medium">gitloom-repo</span>
-              <span className="text-muted-foreground text-sm">2d ago</span>
-              <Button className="ml-auto">Import</Button>
-            </div>
+            {repos.map((repo) => (
+              <div key={repo.id} className="flex items-center gap-2 p-3">
+                <GithubIcon className="fill-muted-foreground size-5" />
+                <a
+                  href={repo.html_url}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-sm font-medium hover:underline"
+                >
+                  {repo.name}
+                </a>
+                {repo.private && <Lock className="text-muted-foreground size-3.5" />}
+                <span className="text-muted-foreground text-sm">
+                  {datetime(repo.updated_at).fromNow()}
+                </span>
+                <Button className="ml-auto">Import</Button>
+              </div>
+            ))}
           </div>
         </div>
         <div className="flex flex-col gap-4 rounded-lg border p-4">
