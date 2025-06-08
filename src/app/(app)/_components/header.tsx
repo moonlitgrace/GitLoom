@@ -1,13 +1,15 @@
 'use client';
 
 import GitloomIcon from '@/components/icons/gitloom';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Header() {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const isNewPath = pathname === '/new';
 
@@ -22,7 +24,7 @@ export default function Header() {
             <span className="text-muted-foreground/50 text-xl">/</span>
             <Button variant={'ghost'} className="gap-2">
               <Avatar className="size-5">
-                <AvatarImage src={'https://github.com/moonlitgrace.png'} />
+                <AvatarImage src={session?.user?.image ?? undefined} />
               </Avatar>
               <span className="text-sm font-bold">gitloom-repo</span>
               <ChevronsUpDown className="opacity-50" />
@@ -33,7 +35,8 @@ export default function Header() {
       <div className="flex items-center gap-4">
         <Button variant={'outline'}>Feedback</Button>
         <Avatar>
-          <AvatarImage src={'https://github.com/moonlitgrace.png'} />
+          <AvatarImage src={session?.user?.image ?? undefined} />
+          <AvatarFallback>{session?.user?.name}</AvatarFallback>
         </Avatar>
       </div>
     </header>
