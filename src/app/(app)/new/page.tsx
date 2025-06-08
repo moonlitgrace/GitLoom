@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'New Repo — Gitloom',
+  title: 'New Repo',
 };
 
 export default function Page() {

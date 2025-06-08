@@ -2,11 +2,12 @@ import GithubIcon from '@/components/icons/github';
 import GitloomIcon from '@/components/icons/gitloom';
 import { Button } from '@/components/ui/button';
 import { auth, signIn } from '@/lib/auth';
+import { generateMetadataTitle } from '@/lib/utils';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Login — Gitloom',
+  title: generateMetadataTitle('Login'),
 };
 
 export default async function Page() {

@@ -1,21 +1,32 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input, InputIcon, InputRoot } from '@/components/ui/input';
+import { generateMetadataTitle } from '@/lib/utils';
 import { Folder, NavigationOff, Plus, Search } from 'lucide-react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'gitloom-repo — Gitloom',
-};
+interface Props {
+  params: Promise<{ repo: string }>;
+}
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug: rawSlug } = await params;
-  const slug = decodeURIComponent(rawSlug);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { repo: rawRepo } = await params;
+  const repo = decodeURIComponent(rawRepo);
+
+  return {
+    title: generateMetadataTitle(repo),
+  };
+}
+
+export default async function Page({ params }: Props) {
+  const { repo: rawRepo } = await params;
+  const repo = decodeURIComponent(rawRepo);
+  console.log(repo);
 
   // check if it has prefix '@'
   // otherwise call notFount
-  if (!slug.startsWith('@')) {
+  if (!repo.startsWith('@')) {
     notFound();
   }
 
