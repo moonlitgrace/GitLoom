@@ -2,8 +2,23 @@ import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input, InputIcon, InputRoot } from '@/components/ui/input';
 import { Folder, NavigationOff, Plus, Search } from 'lucide-react';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-export default function Page() {
+export const metadata: Metadata = {
+  title: 'gitloom-repo — Gitloom',
+};
+
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
+
+  // check if it has prefix '@'
+  // otherwise call notFount
+  if (!slug.startsWith('@')) {
+    notFound();
+  }
+
   return (
     <div className="grid grid-cols-3 gap-4 pt-4">
       <div className="col-span-1">

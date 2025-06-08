@@ -9,22 +9,19 @@ export default {
   ],
   callbacks: {
     async jwt({ token, account, profile }) {
-      if (account) {
-        token.accessToken = account.access_token;
-        token.username = (profile as typeof profile & { login: string }).login;
-      }
+      if (account) token.accessToken = account.access_token;
+      token.username = (profile as typeof profile & { login: string }).login;
 
       return token;
     },
     async session({ session, token }) {
       (session as typeof session & { accessToken: string }).accessToken =
         token.accessToken as string;
-      if (token.username) {
+      if (token.username)
         (session.user as typeof session.user & { username: string }) = {
           ...session.user,
           username: token.username as string,
         };
-      }
 
       return session;
     },
