@@ -1,3 +1,14 @@
+import GithubIcon from '@/components/icons/github';
+import { Button } from '@/components/ui/button';
+import { Input, InputIcon, InputRoot } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Construction, Search } from 'lucide-react';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -5,5 +16,55 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <div>Page</div>;
+  return (
+    <div className="mt-10 space-y-8">
+      <div className="flex flex-col gap-2">
+        <h3 className="text-4xl font-black">Let's do something new.</h3>
+        <span className="text-muted-foreground text-sm">
+          Select a repository to link with Gitloom and start managing your content.
+        </span>
+      </div>
+      <div className="grid grid-cols-2 gap-8">
+        <div className="bg-card/50 space-y-4 rounded-lg border p-4">
+          <h5 className="text-xl font-bold">Import Git Repo</h5>
+          <div className="grid grid-cols-2 gap-4">
+            <Select defaultValue="moonlitgrace" disabled>
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="moonlitgrace">moonlitgrace</SelectItem>
+              </SelectContent>
+            </Select>
+            <InputRoot>
+              <InputIcon>
+                <Search />
+              </InputIcon>
+              <Input placeholder="Search..." />
+            </InputRoot>
+          </div>
+          <div className="divide-y rounded-md border">
+            <div className="flex items-center gap-2 p-3">
+              <GithubIcon className="fill-muted-foreground size-5" />
+              <span className="text-sm font-medium">gitloom-repo</span>
+              <span className="text-muted-foreground text-sm">2d ago</span>
+              <Button className="ml-auto">Import</Button>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col gap-4 rounded-lg border p-4">
+          <div>
+            <h5 className="text-xl font-bold">Clone Template</h5>
+            <span className="text-muted-foreground text-sm">
+              Clone from our starter collection.
+            </span>
+          </div>
+          <div className="flex flex-1 flex-col items-center justify-center gap-2">
+            <Construction className="text-muted-foreground size-10 stroke-1" />
+            <span className="text-muted-foreground text-sm">(Feature comin' soon)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
