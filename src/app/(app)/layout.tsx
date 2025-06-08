@@ -1,4 +1,5 @@
-import DashboardHeader from './_components/header';
+import Footer from './_components/footer';
+import Header from './_components/header';
 
 export default function DashboardLayout({
   children,
@@ -7,8 +8,9 @@ export default function DashboardLayout({
 }>) {
   return (
     <main>
-      <DashboardHeader />
+      <Header />
       <div className="mx-auto max-w-300">{children}</div>
+      <Footer />
     </main>
   );
 }

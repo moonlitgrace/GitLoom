@@ -47,7 +47,7 @@ export default async function Page() {
     );
 
   return (
-    <div className="mx-auto mt-10 w-full max-w-5xl space-y-8">
+    <div className="mx-auto my-10 w-full max-w-5xl space-y-8">
       <div className="flex flex-col gap-2">
         <h3 className="text-4xl font-black">Let's do something new.</h3>
         <span className="text-muted-foreground text-sm">
