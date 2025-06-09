@@ -78,15 +78,25 @@ export default function RepoList() {
     <>
       <div className="grid grid-cols-2 gap-4">
         <Select defaultValue="moonlitgrace" disabled>
-          <SelectTrigger className="w-full">
-            <SelectValue />
-          </SelectTrigger>
+          {status === 'loading' ? (
+            <Skeleton className="h-9 w-full" />
+          ) : (
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+          )}
           <SelectContent>
             <SelectItem value={String(username)}>{username}</SelectItem>
           </SelectContent>
         </Select>
         <InputRoot>
-          <InputIcon>{isLoading ? <Spinner className="bg-foreground" /> : <Search />}</InputIcon>
+          <InputIcon>
+            {debouncedSearch.length > 0 && isLoading ? (
+              <Spinner className="bg-foreground" />
+            ) : (
+              <Search />
+            )}
+          </InputIcon>
           <Input
             placeholder="Search..."
             value={search}
