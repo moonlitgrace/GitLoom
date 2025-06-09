@@ -1,7 +1,7 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input, InputIcon, InputRoot } from '@/components/ui/input';
-import { generateMetadataTitle } from '@/lib/utils';
+import { generateMetadataTitleFor } from '@/lib/utils';
 import { Folder, NavigationOff, Plus, Search } from 'lucide-react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const repo = decodeURIComponent(rawRepo);
 
   return {
-    title: generateMetadataTitle(repo),
+    title: generateMetadataTitleFor(repo),
   };
 }
 

@@ -1,66 +1,71 @@
 import GithubIcon from '@/components/icons/github';
+import GitlabIcon from '@/components/icons/gitlab';
 import GitloomIcon from '@/components/icons/gitloom';
+import GitloomTextIcon from '@/components/icons/gitloom-text';
 import { Button } from '@/components/ui/button';
-import { auth, signIn } from '@/lib/auth';
-import { generateMetadataTitle } from '@/lib/utils';
+import { generateMetadataTitleFor } from '@/lib/utils';
+import { Box, FolderLock, ShieldCheck, WandSparkles } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: generateMetadataTitle('Login'),
+  title: generateMetadataTitleFor('Login'),
 };
 
 export default async function Page() {
-  const session = await auth();
-  console.log(session);
-
   return (
-    <div className="flex min-h-dvh items-center justify-center gap-8">
-      <div className="h-80 w-40 rounded-l-2xl bg-[url(/images/auth-bg.jpg)] bg-cover bg-no-repeat"></div>
-      <div className="flex h-80 w-max flex-col gap-4">
-        <Link href={'/'} className="w-max">
-          <GitloomIcon className="size-10" />
-        </Link>
-        <div className="flex flex-col gap-2">
-          <h4 className="text-4xl font-black">Login</h4>
-          <span className="text-muted-foreground text-sm">
-            Log in to weave content into your repo.
-          </span>
-        </div>
-        <form
-          className="w-full"
-          action={async () => {
-            'use server';
-            await signIn('github');
-          }}
-        >
-          <Button size={'default'} className="w-full">
-            <GithubIcon className="size-5" />
-            Login with Github
-          </Button>
-        </form>
-        <span className="text-muted-foreground text-sm">(More platforms coming soon.)</span>
-        <div className="mt-auto flex flex-col gap-2 text-sm">
-          <span>GitloomLabs &copy; {new Date(Date.now()).getFullYear()}</span>
-          <div className="text-muted-foreground flex items-center gap-2">
-            <a
-              href="https://github.com/GitloomLabs/Gitloom"
-              target="_blank"
-              rel="noreferrer noopener"
-              className="hover:underline"
-            >
-              Github
-            </a>
-            -
-            <Link href={'/legal/privacy-policy'} className="hover:underline">
-              Privacy Policy
-            </Link>
-            -
-            <Link href={'/legal/terms-of-service'} className="hover:underline">
-              Terms of Service
-            </Link>
+    <div className="grid min-h-dvh grid-cols-2">
+      <div className="bg-card/50 grid place-items-center border-r">
+        <div className="flex w-full max-w-100 flex-col gap-4">
+          <ShieldCheck className="text-muted-foreground size-15 stroke-1" />
+          <h4 className="text-4xl font-black">Your data is yours.</h4>
+          <div className="text-muted-foreground flex gap-2 text-sm">
+            <Box className="size-5 shrink-0" />
+            <span>Gitloom is decentralized and doesn't rely on any cetralized database.</span>
+          </div>
+          <div className="text-muted-foreground flex gap-2 text-sm">
+            <FolderLock className="size-5 shrink-0" />
+            <span>
+              Nothing is stored, ever.
+              <br />
+              Content stays in your repo.
+            </span>
+          </div>
+          <div className="text-muted-foreground flex gap-2 text-sm">
+            <WandSparkles className="size-5 shrink-0" />
+            <span>Build fast, own forever.</span>
           </div>
         </div>
+      </div>
+      <div className="mx-auto flex w-full max-w-75 flex-col items-center justify-center gap-4">
+        <div className="flex items-center gap-4">
+          <GitloomIcon className="size-7" />
+          <GitloomTextIcon className="h-5 w-auto" />
+        </div>
+        <span className="text-muted-foreground text-center text-sm">
+          The Git-native CMS for modern content workflows.
+        </span>
+        <div className="flex w-full flex-col gap-4">
+          <Button size={'default'}>
+            <GithubIcon className="size-5" />
+            Sign in with Github
+          </Button>
+          <Button size={'default'} variant={'secondary'} disabled>
+            <GitlabIcon className="fill-foreground size-5" />
+            Sign in with Gitlab
+          </Button>
+        </div>
+        <span className="text-muted-foreground mt-4 text-center text-sm">
+          By signing in, you agree to our <br />
+          <Link href={'/legal/terms-of-service'} className="hover:underline">
+            terms of service
+          </Link>{' '}
+          and{' '}
+          <Link href={'/legal/privacy-policy'} className="hover:underline">
+            privacy policy
+          </Link>
+          .
+        </span>
       </div>
     </div>
   );

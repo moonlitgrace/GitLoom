@@ -11,6 +11,6 @@ export function cn(...inputs: ClassValue[]) {
  * @param title - String to add affix.
  * @returns
  */
-export function generateMetadataTitle(title: string) {
+export function generateMetadataTitleFor(title: string) {
   return `${title} – Gitloom`;
 }
