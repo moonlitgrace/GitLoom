@@ -27,17 +27,15 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const session = await auth();
-  const repos = await fetch(
-    'https://api.github.com/user/repos?affiliation=owner&sort=updated&per_page=5',
-    {
-      headers: {
-        Authorization: `Bearer ${session?.accessToken}`,
-      },
+  const fetchUrl = `https://api.github.com/search/repositories?q=+user:${session?.user?.username}&sort=updated&per_page=5`;
+  const repos = await fetch(fetchUrl, {
+    headers: {
+      Authorization: `Bearer ${session?.accessToken}`,
     },
-  )
+  })
     .then((res) => res.json())
-    .then((data: Repo[]) =>
-      data.map((repo) => ({
+    .then((data: { items: Repo[] }) =>
+      data.items.map((repo) => ({
         id: repo.id,
         name: repo.name,
         private: repo.private,
