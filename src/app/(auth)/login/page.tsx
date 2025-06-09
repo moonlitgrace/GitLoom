@@ -3,6 +3,7 @@ import GitlabIcon from '@/components/icons/gitlab';
 import GitloomIcon from '@/components/icons/gitloom';
 import GitloomTextIcon from '@/components/icons/gitloom-text';
 import { Button } from '@/components/ui/button';
+import { signIn } from '@/lib/auth';
 import { generateMetadataTitleFor } from '@/lib/utils';
 import { Box, FolderLock, ShieldCheck, WandSparkles } from 'lucide-react';
 import { Metadata } from 'next';
@@ -46,10 +47,17 @@ export default async function Page() {
           The Git-native CMS for modern content workflows.
         </span>
         <div className="flex w-full flex-col gap-4">
-          <Button size={'default'}>
-            <GithubIcon className="size-5" />
-            Sign in with Github
-          </Button>
+          <form
+            onSubmit={async () => {
+              'use server';
+              await signIn('github');
+            }}
+          >
+            <Button size={'default'} className="w-full">
+              <GithubIcon className="size-5" />
+              Sign in with Github
+            </Button>
+          </form>
           <Button size={'default'} variant={'secondary'} disabled>
             <GitlabIcon className="fill-foreground size-5" />
             Sign in with Gitlab
