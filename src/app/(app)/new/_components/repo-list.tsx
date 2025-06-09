@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Spinner } from '@/components/ui/spinner';
 import useDebounce from '@/hooks/use-debounce';
 import datetime from '@/lib/date-time';
 import { useQuery } from '@tanstack/react-query';
@@ -85,9 +86,7 @@ export default function RepoList() {
           </SelectContent>
         </Select>
         <InputRoot>
-          <InputIcon>
-            <Search />
-          </InputIcon>
+          <InputIcon>{isLoading ? <Spinner className="bg-foreground" /> : <Search />}</InputIcon>
           <Input
             placeholder="Search..."
             value={search}

@@ -14,7 +14,7 @@ export default function Header() {
   const isNewPath = pathname === '/new';
 
   return (
-    <header className="flex items-center justify-between gap-2 border-b p-4">
+    <header className="flex h-15 items-center justify-between gap-2 border-b px-4">
       <nav className="flex items-center gap-2">
         <Link href={'/dashboard'} className="flex items-center gap-2">
           <GitloomIcon className="size-5" />
