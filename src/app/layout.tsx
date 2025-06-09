@@ -1,5 +1,6 @@
 import QueryProvider from '@/providers/query-provider';
 import type { Metadata } from 'next';
+import { SessionProvider } from 'next-auth/react';
 import { geistMono, geistSans } from './fonts';
 import './globals.css';
 
@@ -16,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <QueryProvider>{children}</QueryProvider>
+        <SessionProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </SessionProvider>
       </body>
     </html>
   );

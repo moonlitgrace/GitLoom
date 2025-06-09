@@ -1,4 +1,3 @@
-import { SessionProvider } from 'next-auth/react';
 import Footer from './_components/footer';
 import Header from './_components/header';
 
@@ -9,9 +8,7 @@ export default function AppLayout({
 }>) {
   return (
     <main>
-      <SessionProvider>
-        <Header />
-      </SessionProvider>
+      <Header />
       <div className="mx-auto max-w-300">{children}</div>
       <Footer />
     </main>
