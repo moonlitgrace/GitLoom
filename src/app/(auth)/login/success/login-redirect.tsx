@@ -2,7 +2,7 @@
 
 import GitloomIcon from '@/components/icons/gitloom';
 import { AnimatedCircularProgressBar } from '@/components/magicui/animated-circular-progress-bar';
-import { LAST_USED_REPO_LOCAL_STORAGE_KEY } from '@/constants';
+import { LOCAL_STORAGE_KEYS } from '@/constants';
 import { cn, waitFor } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -39,7 +39,7 @@ export default function LoginRedirect() {
       setValue((prev) => prev + 100 / 3);
       // task: no.2
       addTask({ pending: true, text: 'Looking for your last used repo...' });
-      const lastUsedRepo = localStorage.getItem(LAST_USED_REPO_LOCAL_STORAGE_KEY);
+      const lastUsedRepo = localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_USED_REPO);
       await waitFor(1500);
       setValue((prev) => prev + 100 / 3);
       // task: no.2
