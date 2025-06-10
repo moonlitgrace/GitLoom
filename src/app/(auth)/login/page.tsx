@@ -1,9 +1,9 @@
+import { signIn } from '@/auth';
 import GithubIcon from '@/components/icons/github';
 import GitlabIcon from '@/components/icons/gitlab';
 import GitloomIcon from '@/components/icons/gitloom';
 import GitloomTextIcon from '@/components/icons/gitloom-text';
 import { Button } from '@/components/ui/button';
-import { signIn } from '@/lib/auth';
 import { generateMetadataTitleFor } from '@/lib/utils';
 import { Box, FolderLock, ShieldCheck, WandSparkles } from 'lucide-react';
 import { Metadata } from 'next';
