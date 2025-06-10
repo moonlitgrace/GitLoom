@@ -1,7 +1,7 @@
-import type { NextAuthConfig } from 'next-auth';
+import NextAuth from 'next-auth';
 import GitHub from 'next-auth/providers/github';
 
-export default {
+export const { auth, handlers, signIn, signOut } = NextAuth({
   session: { strategy: 'jwt' },
   providers: [
     GitHub({
@@ -26,4 +26,4 @@ export default {
       return session;
     },
   },
-} satisfies NextAuthConfig;
+});

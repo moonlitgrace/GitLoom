@@ -1,5 +1,5 @@
 // to keep sessions alive
-export { auth as middleware } from '@/lib/auth';
+export { auth as middleware } from '@/auth';
 
 // optionally, don't invoke middleware on some paths
 export const config = {
