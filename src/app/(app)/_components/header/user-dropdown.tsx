@@ -1,5 +1,6 @@
 'use client';
 
+import { signOutAction } from '@/actions';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -9,12 +10,16 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Spinner } from '@/components/ui/spinner';
 import { ExternalLink, LogOutIcon } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import { useState } from 'react';
 
 export default function UserDropdown() {
   const { data: session } = useSession();
   const { username, name, email, image } = session?.user ?? {};
+
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   return (
     <DropdownMenu>
@@ -40,10 +45,21 @@ export default function UserDropdown() {
           </DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem
+          className="cursor-pointer"
+          disabled={isLoggingOut}
+          onClick={async () => {
+            setIsLoggingOut(true);
+            await signOutAction({ redirectTo: '/login' });
+          }}
+        >
           Log out
           <DropdownMenuShortcut>
-            <LogOutIcon className="size-4" />
+            {isLoggingOut ? (
+              <Spinner className="bg-foreground size-4" />
+            ) : (
+              <LogOutIcon className="size-4" />
+            )}
           </DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
