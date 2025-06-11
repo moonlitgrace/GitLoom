@@ -16,10 +16,18 @@ import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
 export default function UserDropdown() {
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { data: session } = useSession();
   const { username, name, email, image } = session?.user ?? {};
 
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  async function handleLogout() {
+    try {
+      setIsLoggingOut(true);
+      await signOutAction({ redirectTo: '/login' });
+    } finally {
+      setIsLoggingOut(false);
+    }
+  }
 
   return (
     <DropdownMenu>
@@ -45,14 +53,7 @@ export default function UserDropdown() {
           </DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="cursor-pointer"
-          disabled={isLoggingOut}
-          onClick={async () => {
-            setIsLoggingOut(true);
-            await signOutAction({ redirectTo: '/login' });
-          }}
-        >
+        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout} disabled={isLoggingOut}>
           Log out
           <DropdownMenuShortcut>
             {isLoggingOut ? (
