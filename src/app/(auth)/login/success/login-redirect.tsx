@@ -67,11 +67,11 @@ export default function LoginRedirect() {
           value={value}
           gaugePrimaryColor="var(--color-muted-foreground)"
           gaugeSecondaryColor="var(--color-muted)"
-          className="size-30 stroke-1 [&>span[data-current-value]]:hidden"
+          className="size-20 sm:size-30 [&>span[data-current-value]]:hidden"
         />
-        <GitloomIcon className="absolute size-10" />
+        <GitloomIcon className="absolute size-7 sm:size-10" />
       </div>
-      <div className="relative text-sm [&>span]:whitespace-nowrap">
+      <div className="relative text-xs sm:text-sm [&>span]:whitespace-nowrap">
         {tasks.map((task, idx) => (
           <span
             key={idx}
