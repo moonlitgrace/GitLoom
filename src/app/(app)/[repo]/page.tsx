@@ -22,7 +22,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const { repo: rawRepo } = await params;
   const repo = decodeURIComponent(rawRepo);
-  console.log(repo);
 
   // check if it has prefix '@'
   // otherwise call notFount
