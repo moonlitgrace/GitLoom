@@ -13,37 +13,19 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 import useRepos from '@/hooks/use-repos';
-import { importRepo } from '@/lib/api/github';
 import datetime from '@/lib/date-time';
 import { Lock, Search } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { RepoListSkeleton } from './repo-list-skeleton';
 
 export default function RepoList() {
+  const router = useRouter();
   const { data: session, status } = useSession();
   const { search, setSearch, debouncedSearch, repos, isLoading } = useRepos();
-  const [isImporting, setIsImporting] = useState(false);
 
-  const accessToken = session?.accessToken;
+  // easy access
   const username = session?.user?.username;
-
-  async function handleImport(repoName: string) {
-    try {
-      setIsImporting(true);
-      if (!session) return;
-
-      const data = await importRepo({
-        accessToken,
-        username,
-        repo: repoName,
-      });
-
-      console.log(data);
-    } finally {
-      setIsImporting(false);
-    }
-  }
 
   return (
     <>
@@ -92,11 +74,7 @@ export default function RepoList() {
             <span className="text-muted-foreground text-sm">
               {datetime(repo.updated_at).fromNow()}
             </span>
-            <Button
-              className="ml-auto"
-              onClick={() => handleImport(repo.name)}
-              disabled={isImporting}
-            >
+            <Button className="ml-auto" onClick={() => router.push(`/@${repo.name}?import=true`)}>
               Import
             </Button>
           </div>
