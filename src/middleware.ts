@@ -1,4 +1,3 @@
-// to keep sessions alive
 export { auth as middleware } from '@/auth';
 
 // optionally, don't invoke middleware on some paths
