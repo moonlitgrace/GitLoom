@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="grid place-items-center border-t py-8">
       <div className="mx-auto w-full max-w-300">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col items-center gap-4 lg:items-start">
           <nav className="text-muted-foreground [&>a]:hover:text-foreground flex flex-wrap items-center gap-4 text-sm [&>a]:transition-colors">
             <GitloomIcon className="size-5" />
             <Link href={'/'}>Home</Link>

@@ -15,8 +15,8 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   return (
-    <div className="grid min-h-dvh grid-cols-2">
-      <div className="bg-card/50 grid place-items-center border-r">
+    <div className="grid min-h-dvh md:grid-cols-2">
+      <div className="bg-card/50 hidden place-items-center border-r px-6 md:grid lg:px-0">
         <div className="flex w-full max-w-100 flex-col gap-4">
           <ShieldCheck className="text-muted-foreground size-15 stroke-1" />
           <h4 className="text-4xl font-black">Your data is yours.</h4>
@@ -55,7 +55,7 @@ export default async function Page() {
               });
             }}
           >
-            <Button type='submit' size={'default'} className="w-full">
+            <Button type="submit" size={'default'} className="w-full">
               <GithubIcon className="size-5" />
               Sign in with Github
             </Button>
