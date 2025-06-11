@@ -1,9 +1,9 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
-export function RepoListSkeleton({ count = 5 }: { count?: number }) {
+export function RepoListSkeleton() {
   return (
     <>
-      {Array.from({ length: count }).map((_, idx) => {
+      {Array.from({ length: 5 }).map((_, idx) => {
         const minRem = 10;
         const maxRem = 15;
         const randomRem = minRem + ((idx * 2) % (maxRem - minRem + 1));
