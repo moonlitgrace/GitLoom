@@ -16,6 +16,7 @@ jobs:
         with:
           node-version: 22.x
           cache: 'pnpm'
+
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm typecheck
@@ -34,5 +35,6 @@ jobs:
         with:
           path: .next/cache
           key: ${{ runner.os }}-next-${{ hashFiles('**/pnpm-lock.yaml') }}
+
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
