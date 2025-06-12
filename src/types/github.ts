@@ -14,6 +14,15 @@ export interface FetchReposParams {
   query: string;
 }
 
-export interface ImportRepoParams extends Omit<FetchReposParams, 'query'> {
+export interface CheckRepoParams extends Omit<FetchReposParams, 'query'> {
   repo: Repo['name'];
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface ImportRepoConfigParams extends CheckRepoParams {}
+
+export interface CreateContentParams extends ImportRepoConfigParams {
+  path: string;
+  message: string;
+  content: unknown;
 }

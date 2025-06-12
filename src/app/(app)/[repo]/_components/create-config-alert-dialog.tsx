@@ -9,16 +9,39 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DEFAULT_CONFIG } from '@/constants';
+import { createContent } from '@/lib/api/github';
 import { useSession } from 'next-auth/react';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 interface Props {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  repo: string;
 }
 
-export default function CreateConfigAlertDialog({ open, setOpen }: Props) {
+export default function CreateConfigAlertDialog({ open, setOpen, repo }: Props) {
   const { data: session } = useSession();
+  const [isCreating, setIsCreating] = useState(false);
+
+  async function handleCreateConfig() {
+    try {
+      setIsCreating(true);
+      const created = await createContent({
+        accessToken: session?.accessToken,
+        username: session?.user?.username,
+        repo,
+        path: '.gitloom/config.json',
+        message: 'chore: create .gitloom/config.json',
+        content: DEFAULT_CONFIG,
+      });
+
+      console.log('config created: ', created);
+    } finally {
+      setIsCreating(false);
+      setOpen(false);
+    }
+  }
 
   return (
     <AlertDialog open={open}>
@@ -47,8 +70,14 @@ export default function CreateConfigAlertDialog({ open, setOpen }: Props) {
           </div>
         </AlertDialogHeader>
         <AlertDialogFooter className="gap-4">
-          <AlertDialogCancel onClick={() => setOpen(false)}>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-primary hover:bg-primary/90">
+          <AlertDialogCancel onClick={() => setOpen(false)} disabled={isCreating}>
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            className="bg-primary hover:bg-primary/90"
+            onClick={handleCreateConfig}
+            disabled={isCreating}
+          >
             Create Config
           </AlertDialogAction>
         </AlertDialogFooter>

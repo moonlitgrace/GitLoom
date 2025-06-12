@@ -21,7 +21,8 @@ export default function LoadingRepo({ repo }: { repo: string }) {
   const { data: session } = useSession();
   // session gets synced everytime
   // which re-triggers all checks
-  const stableSession = useMemo(() => session, [session?.accessToken, session?.user?.username]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const stableSession = useMemo(() => session, [session?.accessToken]);
 
   const [openCreateConfigAlertDialog, setOpenCreateConfigAlertDialog] = useState(false);
   const [checks, setChecks] = useState<CheckItem[]>([
@@ -126,6 +127,7 @@ export default function LoadingRepo({ repo }: { repo: string }) {
       <CreateConfigAlertDialog
         open={openCreateConfigAlertDialog}
         setOpen={setOpenCreateConfigAlertDialog}
+        repo={repo.slice(1)}
       />
       {/* rest of the layout */}
       <div className="flex min-w-75 flex-col gap-2 p-4">
