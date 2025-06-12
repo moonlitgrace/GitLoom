@@ -1,10 +1,10 @@
 import GithubIcon from '@/components/icons/github';
 import GitloomIcon from '@/components/icons/gitloom';
-import { checkRepo } from '@/lib/api/github';
+import { checkRepo, importRepoConfig } from '@/lib/api/github';
 import { cn } from '@/lib/utils';
 import { CircleCheck, CircleX, Loader2, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 type CheckStatus = 'pending' | 'checking' | 'resolved' | 'failed';
@@ -23,35 +23,33 @@ export default function LoadingRepo({ repo }: { repo: string }) {
     { id: 'config-file', text: 'Looking for configuration file', status: 'pending' },
     { id: 'contents', text: 'Loading contents', status: 'pending' },
   ]);
+  // session gets synced everytime
+  // which re-triggers all checks
+  const stableSession = useMemo(() => session, [session?.accessToken]);
 
-  const failCheck = useCallback(
-    (id: CheckIds) => {
-      setChecks((prev) =>
-        prev.map((check) => (check.id === id ? { ...check, status: 'failed' } : check)),
-      );
-    },
-    [setChecks],
-  );
+  const updateCheckStatus = useCallback((id: CheckIds, status: CheckStatus) => {
+    setChecks((prev) => prev.map((check) => (check.id === id ? { ...check, status } : check)));
+  }, []);
 
   useEffect(() => {
-    if (!session) return;
+    if (!stableSession) return;
     // remove @ prefix
     const repoName = repo.slice(1);
-    (async () => {
-      // step: 0
-      // check if repo exists or not
-      // and can access
-      await checkRepo({
-        accessToken: session.accessToken,
-        username: session.user?.username,
-        repo: repoName + 'x',
-      }).then((ok) => {
-        if (!ok) {
-          const toastId = 'repo-status-failed-toast';
-          failCheck('repo-status');
-          if (!toast.getToasts().some((t) => t.id === toastId)) {
+    const repoStatusToastId = 'repo-status-failed-toast';
+
+    async function doCheckRepo(): Promise<boolean> {
+      try {
+        const isRepoAccessible = await checkRepo({
+          accessToken: stableSession?.accessToken,
+          username: stableSession?.user?.username,
+          repo: repoName,
+        });
+
+        if (!isRepoAccessible) {
+          updateCheckStatus('repo-status', 'failed');
+          if (!toast.getToasts().some((t) => t.id === repoStatusToastId)) {
             toast.error('OhNo! Repo not accessible', {
-              id: toastId,
+              id: repoStatusToastId,
               description: `Repo doesn't exist or you don't have permission.`,
               action: {
                 label: 'Retry',
@@ -61,21 +59,50 @@ export default function LoadingRepo({ repo }: { repo: string }) {
               duration: 8000,
             });
           }
-          return;
+          return false;
         }
 
-        setChecks((prev) =>
-          prev.map((check) =>
-            check.id === 'repo-status'
-              ? { ...check, status: 'resolved' }
-              : check.id === 'config-file'
-                ? { ...check, status: 'checking' }
-                : check,
-          ),
-        );
-      });
-    })();
-  }, [session, repo, failCheck]);
+        updateCheckStatus('repo-status', 'resolved');
+        updateCheckStatus('config-file', 'checking');
+        return true;
+      } catch {
+        updateCheckStatus('repo-status', 'failed');
+        return false;
+      }
+    }
+
+    async function doImportRepoConfig(): Promise<boolean> {
+      try {
+        const config = await importRepoConfig({
+          accessToken: stableSession?.accessToken,
+          username: stableSession?.user?.username,
+          repo: repoName,
+        });
+
+        if (config === null) {
+          updateCheckStatus('config-file', 'failed');
+          return false;
+        }
+
+        updateCheckStatus('config-file', 'resolved');
+        updateCheckStatus('contents', 'checking');
+        return true;
+      } catch {
+        updateCheckStatus('config-file', 'failed');
+        return false;
+      }
+    }
+
+    async function initChecks(): Promise<void> {
+      const repoValid = await doCheckRepo();
+      if (!repoValid) return;
+
+      await doImportRepoConfig();
+    }
+
+    // init checks
+    initChecks();
+  }, [stableSession, repo, updateCheckStatus]);
 
   // return icon for each status state
   function getIcon(status: CheckStatus) {
@@ -97,7 +124,7 @@ export default function LoadingRepo({ repo }: { repo: string }) {
         <div className="mx-auto mb-2 flex flex-col items-center gap-2">
           <div className="flex items-center gap-2">
             <GitloomIcon className="size-5" />
-            <X className="text-muted-foreground size-5 stroke-1 text-xs" />
+            <X className="text-muted-foreground/50 size-5 stroke-1 text-xs" />
             <GithubIcon className="fill-foreground size-5" />
           </div>
           <h2 className="text-xl font-bold">{repo}</h2>

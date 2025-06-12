@@ -6,12 +6,13 @@ import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import UserDropdown from './user-dropdown';
 
 export default function Header() {
   const { data: session } = useSession();
   const pathname = usePathname();
+  const { repo } = useParams<{ repo: string }>();
   const isNewPath = pathname === '/new';
 
   return (
@@ -27,7 +28,7 @@ export default function Header() {
               <Avatar className="size-5">
                 <AvatarImage src={session?.user?.image ?? undefined} />
               </Avatar>
-              <span className="text-sm font-bold">gitloom-repo</span>
+              <span className="text-sm font-bold">{decodeURIComponent(repo)}</span>
               <ChevronsUpDown className="opacity-50" />
             </Button>
           </>
