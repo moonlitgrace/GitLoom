@@ -64,6 +64,20 @@ export default function LoadingRepo({ repo }: { repo: string }) {
     })();
   }, [session, repo, failCheck]);
 
+  // return icon for each status state
+  function getIcon(status: CheckStatus) {
+    switch (status) {
+      case 'checking':
+        return <Loader2 className="size-5 animate-spin" />;
+      case 'resolved':
+        return <CircleCheck className="size-5" />;
+      case 'failed':
+        return <CircleX className="text-destructive size-5" />;
+      default:
+        return <Loader2 className="size-5" />;
+    }
+  }
+
   return (
     <div className="grid h-full place-items-center">
       <div className="flex min-w-75 flex-col gap-2 p-4">
@@ -79,19 +93,14 @@ export default function LoadingRepo({ repo }: { repo: string }) {
           <div
             key={idx}
             className={cn(
-              'flex items-center gap-2 rounded-md border p-2',
-              ['pending', 'resolved'].includes(check.status) && 'text-muted-foreground',
+              'flex items-center gap-2 rounded-md border p-2 transition-colors',
+              (check.status === 'pending' || check.status === 'resolved') &&
+                'text-muted-foreground',
+              check.status === 'checking' && 'bg-secondary/50',
+              check.status === 'failed' && 'bg-destructive/10',
             )}
           >
-            {check.status === 'checking' ? (
-              <Loader2 className="size-5 animate-spin" />
-            ) : check.status === 'resolved' ? (
-              <CircleCheck className="size-5" />
-            ) : check.status === 'failed' ? (
-              <CircleX className="text-destructive size-5" />
-            ) : (
-              <Loader2 className="size-5" />
-            )}
+            {getIcon(check.status)}
             <span
               className={cn(
                 'text-sm font-medium transition-colors',
