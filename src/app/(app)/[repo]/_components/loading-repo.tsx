@@ -6,6 +6,7 @@ import { CircleCheck, CircleX, Loader2, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
+import CreateConfigAlertDialog from './create-config-alert-dialog';
 
 type CheckStatus = 'pending' | 'checking' | 'resolved' | 'failed';
 type CheckIds = 'repo-status' | 'config-file' | 'contents';
@@ -18,14 +19,16 @@ interface CheckItem {
 
 export default function LoadingRepo({ repo }: { repo: string }) {
   const { data: session } = useSession();
+  // session gets synced everytime
+  // which re-triggers all checks
+  const stableSession = useMemo(() => session, [session?.accessToken, session?.user?.username]);
+
+  const [openCreateConfigAlertDialog, setOpenCreateConfigAlertDialog] = useState(false);
   const [checks, setChecks] = useState<CheckItem[]>([
     { id: 'repo-status', text: 'Checking repo status', status: 'checking' },
     { id: 'config-file', text: 'Looking for configuration file', status: 'pending' },
     { id: 'contents', text: 'Loading contents', status: 'pending' },
   ]);
-  // session gets synced everytime
-  // which re-triggers all checks
-  const stableSession = useMemo(() => session, [session?.accessToken]);
 
   const updateCheckStatus = useCallback((id: CheckIds, status: CheckStatus) => {
     setChecks((prev) => prev.map((check) => (check.id === id ? { ...check, status } : check)));
@@ -46,20 +49,7 @@ export default function LoadingRepo({ repo }: { repo: string }) {
         });
 
         if (!isRepoAccessible) {
-          updateCheckStatus('repo-status', 'failed');
-          if (!toast.getToasts().some((t) => t.id === repoStatusToastId)) {
-            toast.error('OhNo! Repo not accessible', {
-              id: repoStatusToastId,
-              description: `Repo doesn't exist or you don't have permission.`,
-              action: {
-                label: 'Retry',
-                onClick: () => window.location.reload(),
-              },
-              position: 'bottom-center',
-              duration: 8000,
-            });
-          }
-          return false;
+          throw new Error('failed');
         }
 
         updateCheckStatus('repo-status', 'resolved');
@@ -67,6 +57,18 @@ export default function LoadingRepo({ repo }: { repo: string }) {
         return true;
       } catch {
         updateCheckStatus('repo-status', 'failed');
+        if (!toast.getToasts().some((t) => t.id === repoStatusToastId)) {
+          toast.error('OhNo! Repo not accessible', {
+            id: repoStatusToastId,
+            description: `Repo doesn't exist or you don't have permission.`,
+            action: {
+              label: 'Retry',
+              onClick: () => window.location.reload(),
+            },
+            position: 'bottom-center',
+            duration: 8000,
+          });
+        }
         return false;
       }
     }
@@ -80,8 +82,7 @@ export default function LoadingRepo({ repo }: { repo: string }) {
         });
 
         if (config === null) {
-          updateCheckStatus('config-file', 'failed');
-          return false;
+          throw new Error('failed');
         }
 
         updateCheckStatus('config-file', 'resolved');
@@ -89,6 +90,7 @@ export default function LoadingRepo({ repo }: { repo: string }) {
         return true;
       } catch {
         updateCheckStatus('config-file', 'failed');
+        setOpenCreateConfigAlertDialog(true);
         return false;
       }
     }
@@ -120,6 +122,12 @@ export default function LoadingRepo({ repo }: { repo: string }) {
 
   return (
     <div className="grid h-full place-items-center">
+      {/* show dialog to create a config file (in-case) */}
+      <CreateConfigAlertDialog
+        open={openCreateConfigAlertDialog}
+        setOpen={setOpenCreateConfigAlertDialog}
+      />
+      {/* rest of the layout */}
       <div className="flex min-w-75 flex-col gap-2 p-4">
         <div className="mx-auto mb-2 flex flex-col items-center gap-2">
           <div className="flex items-center gap-2">
