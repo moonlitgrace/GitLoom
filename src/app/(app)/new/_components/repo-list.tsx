@@ -74,7 +74,7 @@ export default function RepoList() {
             <span className="text-muted-foreground text-sm">
               {datetime(repo.updated_at).fromNow()}
             </span>
-            <Button className="ml-auto" onClick={() => router.push(`/@${repo.name}?import=true`)}>
+            <Button className="ml-auto" onClick={() => router.push(`/@${repo.name}`)}>
               Import
             </Button>
           </div>
