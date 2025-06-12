@@ -66,8 +66,6 @@ export default function LoadingRepo({ repo }: { repo: string }) {
               label: 'Retry',
               onClick: () => window.location.reload(),
             },
-            position: 'bottom-center',
-            duration: 8000,
           });
         }
         return false;

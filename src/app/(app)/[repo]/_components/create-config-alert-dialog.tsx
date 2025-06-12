@@ -13,6 +13,7 @@ import { DEFAULT_CONFIG } from '@/constants';
 import { createContent } from '@/lib/api/github';
 import { useSession } from 'next-auth/react';
 import { Dispatch, SetStateAction, useState } from 'react';
+import { toast } from 'sonner';
 
 interface Props {
   open: boolean;
@@ -36,7 +37,15 @@ export default function CreateConfigAlertDialog({ open, setOpen, repo }: Props) 
         content: DEFAULT_CONFIG,
       });
 
-      console.log('config created: ', created);
+      if (!created) throw new Error('failed');
+      // showo success toast
+      toast.success('Configuration file created!', {
+        description: 'The .gitloom/config.json file has been added to your repo.',
+      });
+    } catch (err) {
+      toast.error('Failed to create configuration file', {
+        description: err instanceof Error ? err.message : 'An unknown error occurred',
+      });
     } finally {
       setIsCreating(false);
       setOpen(false);

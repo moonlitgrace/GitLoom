@@ -21,7 +21,7 @@ export default function RootLayout({
         <SessionProvider>
           <QueryProvider>{children}</QueryProvider>
         </SessionProvider>
-        <Toaster />
+        <Toaster position="bottom-center" />
       </body>
     </html>
   );
