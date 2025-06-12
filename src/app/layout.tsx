@@ -1,3 +1,4 @@
+import { Toaster } from '@/components/ui/sonner';
 import QueryProvider from '@/providers/query-provider';
 import type { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
@@ -20,6 +21,7 @@ export default function RootLayout({
         <SessionProvider>
           <QueryProvider>{children}</QueryProvider>
         </SessionProvider>
+        <Toaster />
       </body>
     </html>
   );

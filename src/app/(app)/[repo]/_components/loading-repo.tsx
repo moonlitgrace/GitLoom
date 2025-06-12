@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { CircleCheck, CircleX, Loader2, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 type CheckStatus = 'pending' | 'checking' | 'resolved' | 'failed';
 type CheckIds = 'repo-status' | 'config-file' | 'contents';
@@ -43,11 +44,23 @@ export default function LoadingRepo({ repo }: { repo: string }) {
       await checkRepo({
         accessToken: session.accessToken,
         username: session.user?.username,
-        repo: repoName,
+        repo: repoName + 'x',
       }).then((ok) => {
-        console.log(ok);
         if (!ok) {
+          const toastId = 'repo-status-failed-toast';
           failCheck('repo-status');
+          if (!toast.getToasts().some((t) => t.id === toastId)) {
+            toast.error('OhNo! Repo not accessible', {
+              id: toastId,
+              description: `Repo doesn't exist or you don't have permission.`,
+              action: {
+                label: 'Retry',
+                onClick: () => window.location.reload(),
+              },
+              position: 'bottom-center',
+              duration: 8000,
+            });
+          }
           return;
         }
 

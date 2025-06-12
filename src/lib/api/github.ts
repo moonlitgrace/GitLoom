@@ -38,7 +38,7 @@ export async function checkRepo({
   return res.ok;
 }
 
-export async function importRepo({
+export async function importRepoConfig({
   accessToken,
   username,
   repo,
@@ -58,6 +58,5 @@ export async function importRepo({
   }
 
   const data = await res.json();
-  console.log(data);
   return data;
 }
