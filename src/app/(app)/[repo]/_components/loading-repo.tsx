@@ -1,4 +1,4 @@
-import GithubIcon from '@/components/icons/github';
+import GitHubIcon from '@/components/icons/github';
 import GitloomIcon from '@/components/icons/gitloom';
 import { checkRepo, importRepoConfig } from '@/lib/api/github';
 import { cn } from '@/lib/utils';
@@ -133,7 +133,7 @@ export default function LoadingRepo({ repo }: { repo: string }) {
           <div className="flex items-center gap-2">
             <GitloomIcon className="size-5" />
             <X className="text-muted-foreground/50 size-5 stroke-1 text-xs" />
-            <GithubIcon className="fill-foreground size-5" />
+            <GitHubIcon className="fill-foreground size-5" />
           </div>
           <h2 className="text-xl font-bold">{repo}</h2>
         </div>

@@ -1,3 +1,4 @@
+import { CONFIG_PATH } from '@/constants';
 import {
   CreateContentParams,
   FetchReposParams,
@@ -5,20 +6,62 @@ import {
   Repo,
 } from '@/types/github';
 
+// constants
+const GITHUB_API_BASE = 'https://api.github.com';
+const COMMON_HEADERS = {
+  Accept: 'application/vnd.github+json',
+};
+
+/**
+ * Creates Authorization header and other COMMON_HEADERS with provided accessToken.
+ * @param accessToken Token to generate Authorization header.
+ */
+function createAuthHeaders(accessToken: string | undefined): Record<string, string> {
+  return {
+    ...COMMON_HEADERS,
+    Authorization: `Bearer ${accessToken}`,
+  };
+}
+
+/**
+ * Handles common fetch operations with error handling
+ * @param url Github API url to fetch.
+ * @param accessToken Token for creating auth headers.
+ * @param options Optional request init options.
+ */
+async function fetchGitHub<T>(
+  url: string,
+  accessToken: string | undefined,
+  options?: RequestInit,
+): Promise<T> {
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      ...createAuthHeaders(accessToken),
+      ...options?.headers,
+    },
+  });
+
+  // 404 case is handled separately
+  if (!res.ok && res.status !== 404) {
+    throw new Error(`GitHub API failed with: ${res.statusText}`);
+  }
+
+  return res.json();
+}
+
 export async function fetchRepos({
   accessToken,
   username,
   query,
 }: FetchReposParams): Promise<Repo[]> {
-  const url = `https://api.github.com/search/repositories?q=${query}+user:${username}&sort=updated&per_page=5`;
-  const res = await fetch(url, {
-    headers: {
-      Accept: 'application/vnd.github+json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const url = new URL(`${GITHUB_API_BASE}/search/repositories`);
+  url.searchParams.set('q', `${query}+user:${username}`);
+  url.searchParams.set('sort', 'updated');
+  url.searchParams.set('per_page', '5');
 
-  const data = await res.json();
+  const data = await fetchGitHub<{ items: Repo[] }>(url.toString(), accessToken);
+
   return data.items.map((repo: Repo) => ({
     id: repo.id,
     name: repo.name,
@@ -33,15 +76,17 @@ export async function checkRepo({
   username,
   repo,
 }: ImportRepoConfigParams): Promise<boolean> {
-  const url = `https://api.github.com/repos/${username}/${repo}`;
-  const res = await fetch(url, {
-    headers: {
-      Accept: 'application/vnd.github+json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const url = `${GITHUB_API_BASE}/repos/${username}/${repo}`;
 
-  return res.ok;
+  try {
+    const res = await fetch(url, {
+      headers: createAuthHeaders(accessToken),
+    });
+
+    return res.ok;
+  } catch {
+    return false;
+  }
 }
 
 export async function importRepoConfig({
@@ -49,20 +94,14 @@ export async function importRepoConfig({
   username,
   repo,
 }: ImportRepoConfigParams): Promise<unknown | null> {
-  const url = `https://api.github.com/repos/${username}/${repo}/contents/.gitloom/config.json`;
-  const res = await fetch(url, {
-    headers: {
-      Accept: 'application/vnd.github+json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const url = `${GITHUB_API_BASE}/repos/${username}/${repo}/contents/${CONFIG_PATH}`;
 
-  if (!res.ok && res.status === 404) {
+  try {
+    const data = await fetchGitHub(url, accessToken);
+    return data;
+  } catch {
     return null;
   }
-
-  const data = await res.json();
-  return data;
 }
 
 export async function createContent({
@@ -73,20 +112,21 @@ export async function createContent({
   content,
   message,
 }: CreateContentParams): Promise<boolean> {
-  const url = `https://api.github.com/repos/${username}/${repo}/contents/${path}`;
+  const url = `${GITHUB_API_BASE}/repos/${username}/${repo}/contents/${path}`;
   const base64Content = Buffer.from(JSON.stringify(content, null, 2)).toString('base64');
 
-  const res = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      Accept: 'application/vnd.github+json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({
-      message,
-      content: base64Content,
-    }),
-  });
+  try {
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: createAuthHeaders(accessToken),
+      body: JSON.stringify({
+        message,
+        content: base64Content,
+      }),
+    });
 
-  return res.ok;
+    return res.ok;
+  } catch {
+    return false;
+  }
 }

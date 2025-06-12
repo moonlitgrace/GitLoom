@@ -1,5 +1,5 @@
 import { signIn } from '@/auth';
-import GithubIcon from '@/components/icons/github';
+import GitHubIcon from '@/components/icons/github';
 import GitlabIcon from '@/components/icons/gitlab';
 import GitloomIcon from '@/components/icons/gitloom';
 import GitloomTextIcon from '@/components/icons/gitloom-text';
@@ -55,7 +55,7 @@ export default async function Page() {
               }}
             >
               <Button type="submit" size={'default'} className="w-full">
-                <GithubIcon className="size-5" />
+                <GitHubIcon className="size-5" />
                 Sign in with Github
               </Button>
             </form>
