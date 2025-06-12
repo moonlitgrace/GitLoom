@@ -1,6 +1,6 @@
 'use client';
 
-import GithubIcon from '@/components/icons/github';
+import GitHubIcon from '@/components/icons/github';
 import { Button } from '@/components/ui/button';
 import { Input, InputIcon, InputRoot } from '@/components/ui/input';
 import {
@@ -61,7 +61,7 @@ export default function RepoList() {
         {(status === 'loading' || isLoading) && <RepoListSkeleton />}
         {repos?.map((repo) => (
           <div key={repo.id} className="flex h-14 items-center gap-2 px-3">
-            <GithubIcon className="fill-muted-foreground size-5" />
+            <GitHubIcon className="fill-muted-foreground size-5" />
             <a
               href={repo.html_url}
               target="_blank"

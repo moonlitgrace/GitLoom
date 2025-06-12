@@ -29,7 +29,7 @@ function createAuthHeaders(accessToken: string | undefined): Record<string, stri
  * @param accessToken Token for creating auth headers.
  * @param options Optional request init options.
  */
-async function fetchGithub<T>(
+async function fetchGitHub<T>(
   url: string,
   accessToken: string | undefined,
   options?: RequestInit,
@@ -44,7 +44,7 @@ async function fetchGithub<T>(
 
   // 404 case is handled separately
   if (!res.ok && res.status !== 404) {
-    throw new Error(`Github API failed with: ${res.statusText}`);
+    throw new Error(`GitHub API failed with: ${res.statusText}`);
   }
 
   return res.json();
@@ -60,7 +60,7 @@ export async function fetchRepos({
   url.searchParams.set('sort', 'updated');
   url.searchParams.set('per_page', '5');
 
-  const data = await fetchGithub<{ items: Repo[] }>(url.toString(), accessToken);
+  const data = await fetchGitHub<{ items: Repo[] }>(url.toString(), accessToken);
 
   return data.items.map((repo: Repo) => ({
     id: repo.id,
@@ -97,7 +97,7 @@ export async function importRepoConfig({
   const url = `${GITHUB_API_BASE}/repos/${username}/${repo}/contents/${CONFIG_PATH}`;
 
   try {
-    const data = await fetchGithub(url, accessToken);
+    const data = await fetchGitHub(url, accessToken);
     return data;
   } catch {
     return null;
