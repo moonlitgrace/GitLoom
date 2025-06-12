@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { DEFAULT_CONFIG } from '@/constants';
+import { CONFIG_PATH, DEFAULT_CONFIG } from '@/constants';
 import { createContent } from '@/lib/api/github';
 import { useSession } from 'next-auth/react';
 import { Dispatch, SetStateAction, useState } from 'react';
@@ -32,15 +32,15 @@ export default function CreateConfigAlertDialog({ open, setOpen, repo }: Props) 
         accessToken: session?.accessToken,
         username: session?.user?.username,
         repo,
-        path: '.gitloom/config.json',
-        message: 'chore: create .gitloom/config.json',
+        path: CONFIG_PATH,
+        message: `chore: create ${CONFIG_PATH}`,
         content: DEFAULT_CONFIG,
       });
 
       if (!created) throw new Error('failed');
       // showo success toast
       toast.success('Configuration file created!', {
-        description: 'The .gitloom/config.json file has been added to your repo.',
+        description: `The ${CONFIG_PATH} file has been added to your repo.`,
       });
     } catch (err) {
       toast.error('Failed to create configuration file', {
@@ -59,8 +59,8 @@ export default function CreateConfigAlertDialog({ open, setOpen, repo }: Props) 
           <AlertDialogTitle>Configuration File Required</AlertDialogTitle>
           <AlertDialogDescription>
             We noticed your repository doesn&apos;t have a{' '}
-            <code className="font-mono text-sm">.gitloom/config.json</code> file. This file helps
-            Gitloom understand your project structure and workflows.
+            <code className="font-mono text-sm">{CONFIG_PATH}</code> file. This file helps Gitloom
+            understand your project structure and workflows.
           </AlertDialogDescription>
           <div className="bg-secondary/25 mt-2 flex gap-4 rounded-md border p-4">
             <Avatar className="size-6">
