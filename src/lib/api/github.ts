@@ -22,6 +22,22 @@ export async function fetchRepos({
   }));
 }
 
+export async function checkRepo({
+  accessToken,
+  username,
+  repo,
+}: ImportRepoParams): Promise<boolean> {
+  const url = `https://api.github.com/repos/${username}/${repo}`;
+  const res = await fetch(url, {
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  return res.ok;
+}
+
 export async function importRepo({
   accessToken,
   username,

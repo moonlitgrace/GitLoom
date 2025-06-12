@@ -1,9 +1,10 @@
 import GithubIcon from '@/components/icons/github';
 import GitloomIcon from '@/components/icons/gitloom';
+import { checkRepo } from '@/lib/api/github';
 import { cn } from '@/lib/utils';
 import { CircleCheck, CircleX, Loader2, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 type CheckStatus = 'pending' | 'checking' | 'resolved' | 'failed';
 type CheckIds = 'repo-status' | 'config-file' | 'contents';
@@ -22,36 +23,46 @@ export default function LoadingRepo({ repo }: { repo: string }) {
     { id: 'contents', text: 'Loading contents', status: 'pending' },
   ]);
 
+  const failCheck = useCallback(
+    (id: CheckIds) => {
+      setChecks((prev) =>
+        prev.map((check) => (check.id === id ? { ...check, status: 'failed' } : check)),
+      );
+    },
+    [setChecks],
+  );
+
   useEffect(() => {
     if (!session) return;
     // remove @ prefix
     const repoName = repo.slice(1);
     (async () => {
-      // no.1: check repo
-      await fetch(`https://api.github.com/repos/${session?.user?.username}/${repoName}s`).then(
-        (res) => {
-          if (res.ok) {
-            setChecks((prev) =>
-              prev.map((check) =>
-                check.id === 'repo-status'
-                  ? { ...check, status: 'resolved' }
-                  : check.id === 'config-file'
-                    ? { ...check, status: 'checking' }
-                    : check,
-              ),
-            );
-          } else {
-            // repo not found
-            setChecks((prev) =>
-              prev.map((check) =>
-                check.id === 'repo-status' ? { ...check, status: 'failed' } : check,
-              ),
-            );
-          }
-        },
-      );
+      // step: 0
+      // check if repo exists or not
+      // and can access
+      await checkRepo({
+        accessToken: session.accessToken,
+        username: session.user?.username,
+        repo: repoName,
+      }).then((ok) => {
+        console.log(ok);
+        if (!ok) {
+          failCheck('repo-status');
+          return;
+        }
+
+        setChecks((prev) =>
+          prev.map((check) =>
+            check.id === 'repo-status'
+              ? { ...check, status: 'resolved' }
+              : check.id === 'config-file'
+                ? { ...check, status: 'checking' }
+                : check,
+          ),
+        );
+      });
     })();
-  }, [session, repo]);
+  }, [session, repo, failCheck]);
 
   return (
     <div className="grid h-full place-items-center">
