@@ -11,14 +11,14 @@ export default function Footer() {
             <GitloomIcon className="size-5" />
             <Link href={'/'}>Home</Link>
             <a
-              href="https://github.com/GitloomLabs/Gitloom/discussions"
+              href="https://github.com/GitLoomLabs/GitLoom/discussions"
               target="_blank"
               rel="noreferrer noopener"
             >
               Discussions
             </a>
             <a
-              href="https://github.com/GitloomLabs/Gitloom/issues"
+              href="https://github.com/GitLoomLabs/GitLoom/issues"
               target="_blank"
               rel="noreferrer noopener"
             >
@@ -29,7 +29,7 @@ export default function Footer() {
             </button>
           </nav>
           <span className="text-muted-foreground text-xs">
-            &copy; {new Date(Date.now()).getFullYear()}, GitloomLabs. MIT License
+            &copy; {new Date(Date.now()).getFullYear()}, GitLoomLabs. MIT License
           </span>
         </div>
       </div>

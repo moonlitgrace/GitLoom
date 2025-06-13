@@ -42,7 +42,7 @@ export default function RepoContents({ repo }: { repo: string }) {
             <button className="text-sm hover:underline">.gitloom</button>
           </div>
           <a
-            href="https://github.com/GitloomLabs/Gitloom/commit/ca72cffb748c9e9be0a5db83604ebbe81506946f"
+            href="https://github.com/GitLoomLabs/GitLoom/commit/ca72cffb748c9e9be0a5db83604ebbe81506946f"
             target="_blank"
             rel="noreferrer noopener"
             className="text-muted-foreground col-span-2 text-sm hover:underline"
