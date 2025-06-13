@@ -6,7 +6,7 @@ import { CircleCheck, CircleX, Loader2, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import CreateConfigAlertDialog from './create-config-alert-dialog';
+import CreateConfigDialog from './create-config-dialog';
 
 type CheckStatus = 'pending' | 'checking' | 'resolved' | 'failed';
 type CheckIds = 'repo-status' | 'config-file' | 'contents';
@@ -24,7 +24,7 @@ export default function LoadingRepo({ repo }: { repo: string }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const stableSession = useMemo(() => session, [session?.accessToken]);
 
-  const [openCreateConfigAlertDialog, setOpenCreateConfigAlertDialog] = useState(false);
+  const [openCreateConfigDialog, setOpenCreateConfigDialog] = useState(false);
   const [checks, setChecks] = useState<CheckItem[]>([
     { id: 'repo-status', text: 'Checking repo status', status: 'checking' },
     { id: 'config-file', text: 'Looking for configuration file', status: 'pending' },
@@ -89,7 +89,7 @@ export default function LoadingRepo({ repo }: { repo: string }) {
         return true;
       } catch {
         updateCheckStatus('config-file', 'failed');
-        setOpenCreateConfigAlertDialog(true);
+        setOpenCreateConfigDialog(true);
         return false;
       }
     }
@@ -122,9 +122,9 @@ export default function LoadingRepo({ repo }: { repo: string }) {
   return (
     <div className="grid h-full place-items-center">
       {/* show dialog to create a config file (in-case) */}
-      <CreateConfigAlertDialog
-        open={openCreateConfigAlertDialog}
-        setOpen={setOpenCreateConfigAlertDialog}
+      <CreateConfigDialog
+        open={openCreateConfigDialog}
+        setOpen={setOpenCreateConfigDialog}
         repo={repo.slice(1)}
       />
       {/* rest of the layout */}
