@@ -1,9 +1,61 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input, InputIcon, InputRoot } from '@/components/ui/input';
+import { useStableSession } from '@/hooks/use-stable-session';
+import { importRepoConfig } from '@/lib/api/github';
 import { Folder, Plus, Search } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-export default function RepoContents({ repo }: { repo: string }) {
+interface Props {
+  repo: string;
+  setIsConfigDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
+  const stableSession = useStableSession();
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  console.log(isLoaded);
+
+  const loadConfigFilePromise = useCallback(
+    () =>
+      new Promise(async (resolve, reject) => {
+        const config = await importRepoConfig({
+          accessToken: stableSession?.accessToken,
+          username: stableSession?.user?.username,
+          repo: repo,
+        });
+
+        if (config === null) {
+          setIsConfigDialogOpen(true);
+          setIsLoaded(false);
+          reject();
+        }
+
+        resolve(config);
+        setIsLoaded(true);
+      }),
+    [stableSession, repo],
+  );
+
+  useEffect(() => {
+    if (!stableSession || !repo) return;
+
+    // call toast to init config load and show some feedback
+    toast.promise(loadConfigFilePromise, {
+      loading: 'Loading config file...',
+      success: {
+        message: 'Config loaded successfully!',
+        description: 'Fetching content based on configuration...',
+      },
+      error: {
+        message: 'Config load failed',
+        description: 'Failed to load repo config file.',
+      },
+    });
+  }, [stableSession, loadConfigFilePromise, repo]);
+
   return (
     <div className="col-span-2 flex flex-col gap-2">
       <div className="flex items-center gap-4">
