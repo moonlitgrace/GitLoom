@@ -1,4 +1,4 @@
-import GitloomIcon from '@/components/icons/gitloom';
+import GitLoomIcon from '@/components/icons/gitloom';
 import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 
@@ -8,17 +8,17 @@ export default function Footer() {
       <div className="mx-auto w-full max-w-300">
         <div className="flex flex-col items-center gap-4 lg:items-start">
           <nav className="text-muted-foreground [&>a]:hover:text-foreground flex flex-wrap items-center gap-4 text-sm [&>a]:transition-colors">
-            <GitloomIcon className="size-5" />
+            <GitLoomIcon className="size-5" />
             <Link href={'/'}>Home</Link>
             <a
-              href="https://github.com/GitloomLabs/Gitloom/discussions"
+              href="https://github.com/GitLoomLabs/GitLoom/discussions"
               target="_blank"
               rel="noreferrer noopener"
             >
               Discussions
             </a>
             <a
-              href="https://github.com/GitloomLabs/Gitloom/issues"
+              href="https://github.com/GitLoomLabs/GitLoom/issues"
               target="_blank"
               rel="noreferrer noopener"
             >
@@ -29,7 +29,7 @@ export default function Footer() {
             </button>
           </nav>
           <span className="text-muted-foreground text-xs">
-            &copy; {new Date(Date.now()).getFullYear()}, GitloomLabs. MIT License
+            &copy; {new Date(Date.now()).getFullYear()}, GitLoomLabs. MIT License
           </span>
         </div>
       </div>

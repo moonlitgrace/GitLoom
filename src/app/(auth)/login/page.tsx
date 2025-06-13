@@ -1,8 +1,8 @@
 import { signIn } from '@/auth';
 import GitHubIcon from '@/components/icons/github';
 import GitlabIcon from '@/components/icons/gitlab';
-import GitloomIcon from '@/components/icons/gitloom';
-import GitloomTextIcon from '@/components/icons/gitloom-text';
+import GitLoomIcon from '@/components/icons/gitloom';
+import GitLoomTextIcon from '@/components/icons/gitloom-text';
 import { Button } from '@/components/ui/button';
 import { generateMetadataTitleFor } from '@/lib/utils';
 import { Box, FolderLock, ShieldCheck, WandSparkles } from 'lucide-react';
@@ -22,7 +22,7 @@ export default async function Page() {
           <h4 className="text-3xl font-black lg:text-4xl">Your data is yours.</h4>
           <div className="text-muted-foreground flex gap-2 text-sm">
             <Box className="size-5 shrink-0" />
-            <span>Gitloom is decentralized and doesn&apos;t rely on any cetralized database.</span>
+            <span>GitLoom is decentralized and doesn&apos;t rely on any cetralized database.</span>
           </div>
           <div className="text-muted-foreground flex gap-2 text-sm">
             <FolderLock className="size-5 shrink-0" />
@@ -40,8 +40,8 @@ export default async function Page() {
       </div>
       <div className="grid place-items-center px-4 lg:px-0">
         <div className="flex w-full max-w-75 flex-col items-center justify-center gap-4">
-          <GitloomIcon className="size-7" />
-          <GitloomTextIcon className="h-5 w-auto" />
+          <GitLoomIcon className="size-7" />
+          <GitLoomTextIcon className="h-5 w-auto" />
           <span className="text-muted-foreground text-center text-sm">
             The Git-native CMS for modern content workflows.
           </span>

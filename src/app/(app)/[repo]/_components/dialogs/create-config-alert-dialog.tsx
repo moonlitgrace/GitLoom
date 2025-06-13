@@ -59,7 +59,7 @@ export default function CreateConfigAlertDialog({ open, setOpen, repo }: Props) 
           <AlertDialogTitle>Configuration File Required</AlertDialogTitle>
           <AlertDialogDescription>
             We noticed your repository doesn&apos;t have a{' '}
-            <code className="font-mono text-sm">{CONFIG_PATH}</code> file. This file helps Gitloom
+            <code className="font-mono text-sm">{CONFIG_PATH}</code> file. This file helps GitLoom
             understand your project structure and workflows.
           </AlertDialogDescription>
           <div className="bg-secondary/25 mt-2 flex gap-4 rounded-md border p-4">

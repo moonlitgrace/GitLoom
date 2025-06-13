@@ -6,7 +6,7 @@ import { geistMono, geistSans } from './fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Gitloom',
+  title: 'GitLoom',
   description: 'The Git-native CMS for modern content workflows.',
 };
 

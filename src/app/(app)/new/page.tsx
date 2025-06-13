@@ -12,7 +12,7 @@ export default async function Page() {
       <div className="flex flex-col gap-2">
         <h3 className="text-4xl font-black">Let&apos;s do something new.</h3>
         <span className="text-muted-foreground text-sm">
-          Select a repository to link with Gitloom and start managing your content.
+          Select a repository to link with GitLoom and start managing your content.
         </span>
       </div>
       <div className="grid gap-8 md:grid-cols-2">

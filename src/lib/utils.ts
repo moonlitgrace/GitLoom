@@ -6,12 +6,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Generate Metatdata title with " – Gitloom" affix.
+ * Generate Metatdata title with " – GitLoom" affix.
  * @param title - String to add affix.
  * @returns
  */
 export function generateMetadataTitleFor(title: string) {
-  return `${title} – Gitloom`;
+  return `${title} – GitLoom`;
 }
 
 export async function waitFor(t: number) {
