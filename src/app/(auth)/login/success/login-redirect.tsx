@@ -1,6 +1,6 @@
 'use client';
 
-import GitloomIcon from '@/components/icons/gitloom';
+import GitLoomIcon from '@/components/icons/gitloom';
 import { AnimatedCircularProgressBar } from '@/components/magicui/animated-circular-progress-bar';
 import { LOCAL_STORAGE_KEYS } from '@/constants';
 import { cn, waitFor } from '@/lib/utils';
@@ -69,7 +69,7 @@ export default function LoginRedirect() {
           gaugeSecondaryColor="var(--color-muted)"
           className="size-20 sm:size-30 [&>span[data-current-value]]:hidden"
         />
-        <GitloomIcon className="absolute size-7 sm:size-10" />
+        <GitLoomIcon className="absolute size-7 sm:size-10" />
       </div>
       <div className="relative text-xs sm:text-sm [&>span]:whitespace-nowrap">
         {tasks.map((task, idx) => (

@@ -1,6 +1,6 @@
 'use client';
 
-import GitloomIcon from '@/components/icons/gitloom';
+import GitLoomIcon from '@/components/icons/gitloom';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown } from 'lucide-react';
@@ -19,7 +19,7 @@ export default function Header() {
     <header className="flex h-15 items-center justify-between gap-2 border-b px-4">
       <nav className="flex items-center gap-2">
         <Link href={'/dashboard'} className="flex items-center gap-2">
-          <GitloomIcon className="size-5" />
+          <GitLoomIcon className="size-5" />
         </Link>
         {!isNewPath && (
           <>

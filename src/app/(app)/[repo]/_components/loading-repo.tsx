@@ -1,5 +1,5 @@
 import GitHubIcon from '@/components/icons/github';
-import GitloomIcon from '@/components/icons/gitloom';
+import GitLoomIcon from '@/components/icons/gitloom';
 import { checkRepo, importRepoConfig } from '@/lib/api/github';
 import { cn } from '@/lib/utils';
 import { CircleCheck, CircleX, Loader2, X } from 'lucide-react';
@@ -131,7 +131,7 @@ export default function LoadingRepo({ repo }: { repo: string }) {
       <div className="flex min-w-75 flex-col gap-2 p-4">
         <div className="mx-auto mb-2 flex flex-col items-center gap-2">
           <div className="flex items-center gap-2">
-            <GitloomIcon className="size-5" />
+            <GitLoomIcon className="size-5" />
             <X className="text-muted-foreground/50 size-5 stroke-1 text-xs" />
             <GitHubIcon className="fill-foreground size-5" />
           </div>
