@@ -36,24 +36,25 @@ export default function RepoContents({ repo, setOpenCreateConfigAlertDialog }: P
         resolve(config);
         setIsLoaded(true);
       }),
-    [stableSession],
+    [stableSession, repo],
   );
 
   useEffect(() => {
-    if (!stableSession) return;
+    if (!stableSession || !repo) return;
 
+    // call toast to init config load and show some feedback
     toast.promise(loadConfigFilePromise, {
       loading: 'Loading config file...',
       success: {
         message: 'Config loaded successfully!',
-        description: 'Ready to fetch contents.',
+        description: 'Fetching content based on configuration...',
       },
       error: {
         message: 'Config load failed',
         description: 'Failed to load repo config file.',
       },
     });
-  }, [stableSession, loadConfigFilePromise]);
+  }, [stableSession, loadConfigFilePromise, repo]);
 
   return (
     <div className="col-span-2 flex flex-col gap-2">
