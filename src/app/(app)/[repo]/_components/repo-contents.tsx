@@ -1,9 +1,57 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input, InputIcon, InputRoot } from '@/components/ui/input';
+import { useStableSession } from '@/hooks/use-stable-session';
+import { importRepoConfig } from '@/lib/api/github';
 import { Folder, Plus, Search } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-export default function RepoContents({ repo }: { repo: string }) {
+interface Props {
+  repo: string;
+  setOpenCreateConfigAlertDialog: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function RepoContents({ repo, setOpenCreateConfigAlertDialog }: Props) {
+  const stableSession = useStableSession();
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  console.log(isLoaded);
+
+  const loadConfigFilePromise = () =>
+    new Promise(async (resolve, reject) => {
+      const config = await importRepoConfig({
+        accessToken: stableSession?.accessToken,
+        username: stableSession?.user?.username,
+        repo: repo,
+      });
+
+      if (config === null) {
+        setOpenCreateConfigAlertDialog(true);
+        setIsLoaded(false);
+        reject();
+      }
+
+      resolve(config);
+      setIsLoaded(true);
+    });
+
+  useEffect(() => {
+    if (!stableSession) return;
+
+    toast.promise(loadConfigFilePromise, {
+      loading: 'Loading config file...',
+      success: {
+        message: 'Config loaded successfully!',
+        description: 'Ready to fetch contents.',
+      },
+      error: {
+        message: 'Config load failed',
+        description: 'Failed to load repo config file.',
+      },
+    });
+  }, [stableSession, loadConfigFilePromise]);
+
   return (
     <div className="col-span-2 flex flex-col gap-2">
       <div className="flex items-center gap-4">

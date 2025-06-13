@@ -27,5 +27,5 @@ export default async function Page({ params }: Props) {
   }
 
   // render client-side page
-  return <ClientPage repo={repo} />;
+  return <ClientPage repo={repo.slice(1)} />; // without "@" prefix
 }
