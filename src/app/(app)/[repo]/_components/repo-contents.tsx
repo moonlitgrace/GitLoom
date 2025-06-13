@@ -9,10 +9,10 @@ import { toast } from 'sonner';
 
 interface Props {
   repo: string;
-  setOpenCreateConfigAlertDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsConfigDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function RepoContents({ repo, setOpenCreateConfigAlertDialog }: Props) {
+export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
   const stableSession = useStableSession();
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -28,7 +28,7 @@ export default function RepoContents({ repo, setOpenCreateConfigAlertDialog }: P
         });
 
         if (config === null) {
-          setOpenCreateConfigAlertDialog(true);
+          setIsConfigDialogOpen(true);
           setIsLoaded(false);
           reject();
         }
