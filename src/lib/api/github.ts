@@ -60,7 +60,10 @@ export async function fetchRepos({
   url.searchParams.set('sort', 'updated');
   url.searchParams.set('per_page', '5');
 
-  const data = await fetchGitHub<{ items: Repo[] }>(url.toString(), accessToken);
+  const data = await fetchGitHub<{ items: Repo[] }>(
+    decodeURIComponent(url.toString()),
+    accessToken,
+  );
 
   return data.items.map((repo: Repo) => ({
     id: repo.id,
