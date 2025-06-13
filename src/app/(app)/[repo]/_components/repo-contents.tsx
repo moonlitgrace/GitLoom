@@ -4,7 +4,7 @@ import { Input, InputIcon, InputRoot } from '@/components/ui/input';
 import { useStableSession } from '@/hooks/use-stable-session';
 import { importRepoConfig } from '@/lib/api/github';
 import { Folder, Plus, Search } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 interface Props {
@@ -18,23 +18,26 @@ export default function RepoContents({ repo, setOpenCreateConfigAlertDialog }: P
 
   console.log(isLoaded);
 
-  const loadConfigFilePromise = () =>
-    new Promise(async (resolve, reject) => {
-      const config = await importRepoConfig({
-        accessToken: stableSession?.accessToken,
-        username: stableSession?.user?.username,
-        repo: repo,
-      });
+  const loadConfigFilePromise = useCallback(
+    () =>
+      new Promise(async (resolve, reject) => {
+        const config = await importRepoConfig({
+          accessToken: stableSession?.accessToken,
+          username: stableSession?.user?.username,
+          repo: repo,
+        });
 
-      if (config === null) {
-        setOpenCreateConfigAlertDialog(true);
-        setIsLoaded(false);
-        reject();
-      }
+        if (config === null) {
+          setOpenCreateConfigAlertDialog(true);
+          setIsLoaded(false);
+          reject();
+        }
 
-      resolve(config);
-      setIsLoaded(true);
-    });
+        resolve(config);
+        setIsLoaded(true);
+      }),
+    [stableSession],
+  );
 
   useEffect(() => {
     if (!stableSession) return;
