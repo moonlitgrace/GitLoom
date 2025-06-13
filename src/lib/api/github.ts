@@ -1,5 +1,6 @@
 import { CONFIG_PATH } from '@/constants';
 import {
+  CheckRepoParams,
   CreateContentParams,
   FetchReposParams,
   ImportRepoConfigParams,
@@ -50,6 +51,10 @@ async function fetchGitHub<T>(
   return res.json();
 }
 
+/**
+ * Fetches list of repos of the authenticated user from github.
+ * Response is sorted by updated date and has per_page of 5.
+ */
 export async function fetchRepos({
   accessToken,
   username,
@@ -60,7 +65,10 @@ export async function fetchRepos({
   url.searchParams.set('sort', 'updated');
   url.searchParams.set('per_page', '5');
 
-  const data = await fetchGitHub<{ items: Repo[] }>(url.toString(), accessToken);
+  const data = await fetchGitHub<{ items: Repo[] }>(
+    decodeURIComponent(url.toString()),
+    accessToken,
+  );
 
   return data.items.map((repo: Repo) => ({
     id: repo.id,
@@ -71,11 +79,15 @@ export async function fetchRepos({
   }));
 }
 
+/**
+ * Checks wheather the repo if accessible or not.
+ * Retruns a promise which resolves to a boolean value.
+ */
 export async function checkRepo({
   accessToken,
   username,
   repo,
-}: ImportRepoConfigParams): Promise<boolean> {
+}: CheckRepoParams): Promise<boolean> {
   const url = `${GITHUB_API_BASE}/repos/${username}/${repo}`;
 
   try {
@@ -89,6 +101,10 @@ export async function checkRepo({
   }
 }
 
+/**
+ * Imports the configuration file from the selected repo.
+ * Retruns a Promise which resolves to the configuration or null (if not found any).
+ */
 export async function importRepoConfig({
   accessToken,
   username,
@@ -104,6 +120,10 @@ export async function importRepoConfig({
   }
 }
 
+/**
+ * Creates a file with content in the selected repo.
+ * Retruns a Promise which resolves to a boolean value to indicate wheather the content is created or not.
+ */
 export async function createContent({
   accessToken,
   username,
