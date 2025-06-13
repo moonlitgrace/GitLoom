@@ -21,7 +21,7 @@ interface Props {
   repo: string;
 }
 
-export default function CreateConfigDialog({ open, setOpen, repo }: Props) {
+export default function CreateConfigAlertDialog({ open, setOpen, repo }: Props) {
   const { data: session } = useSession();
   const [isCreating, setIsCreating] = useState(false);
 
