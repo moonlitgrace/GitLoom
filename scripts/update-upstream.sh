@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# NOTE: you must have a upstream remote added
+# which points to git@github.com:GitLoomLabs/GitLoom.git
+
 # check for uncommitted changes
 if ! git diff-index --quiet HEAD --; then
     echo "Error: You have uncommitted changes. Please commit or stash them first."
