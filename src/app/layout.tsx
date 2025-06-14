@@ -21,7 +21,15 @@ export default function RootLayout({
         <SessionProvider>
           <QueryProvider>{children}</QueryProvider>
         </SessionProvider>
-        <Toaster position="bottom-center" />
+        <Toaster
+          position="bottom-center"
+          toastOptions={{
+            className: 'px-4 py-3! gap-2! text-xs!',
+            classNames: {
+              description: 'text-muted-foreground!',
+            },
+          }}
+        />
       </body>
     </html>
   );
