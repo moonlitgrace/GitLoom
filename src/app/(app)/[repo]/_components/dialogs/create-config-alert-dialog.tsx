@@ -11,6 +11,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { CONFIG_PATH, DEFAULT_CONFIG } from '@/constants';
 import { createContent } from '@/lib/api/github';
+import { Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { toast } from 'sonner';
@@ -40,11 +41,11 @@ export default function CreateConfigAlertDialog({ open, setOpen, repo }: Props) 
       if (!created) throw new Error('failed');
       // showo success toast
       toast.success('Configuration file created!', {
-        description: `The ${CONFIG_PATH} file has been added to your repo.`,
+        description: `The ${CONFIG_PATH} file has been added.`,
       });
-    } catch (err) {
-      toast.error('Failed to create configuration file', {
-        description: err instanceof Error ? err.message : 'An unknown error occurred',
+    } catch {
+      toast.error('Failed to create configuration file!', {
+        description: `Could not create ${CONFIG_PATH}.`,
       });
     } finally {
       setIsCreating(false);
@@ -69,8 +70,8 @@ export default function CreateConfigAlertDialog({ open, setOpen, repo }: Props) 
             </Avatar>
             <div className="flex-1">
               <p className="text-sm font-medium">Auto-generated configuration</p>
-              <p className="text-muted-foreground text-sm">Will create default config with:</p>
-              <ul className="text-muted-foreground mt-1 ml-4 list-disc text-sm">
+              <p className="text-muted-foreground text-xs">Will create default config with:</p>
+              <ul className="text-muted-foreground mt-1 ml-4 list-disc text-xs">
                 <li>Latest version</li>
                 <li>Contents and its locations</li>
               </ul>
@@ -87,6 +88,7 @@ export default function CreateConfigAlertDialog({ open, setOpen, repo }: Props) 
             onClick={handleCreateConfig}
             disabled={isCreating}
           >
+            {isCreating && <Loader2 className="size-4 animate-spin" />}
             Create Config
           </AlertDialogAction>
         </AlertDialogFooter>
