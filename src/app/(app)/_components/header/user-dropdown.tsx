@@ -34,7 +34,7 @@ export default function UserDropdown() {
       <DropdownMenuTrigger>
         <Avatar>
           <AvatarImage src={image ?? undefined} />
-          <AvatarFallback>{name}</AvatarFallback>
+          <AvatarFallback>{name?.[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">

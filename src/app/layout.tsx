@@ -24,7 +24,7 @@ export default function RootLayout({
         <Toaster
           position="bottom-center"
           toastOptions={{
-            className: 'px-4 py-3! gap-2! text-xs!',
+            className: 'px-4! py-3! gap-2! text-xs!',
             classNames: {
               description: 'text-muted-foreground!',
             },
