@@ -1,10 +1,11 @@
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input, InputIcon, InputRoot } from '@/components/ui/input';
 import { useStableSession } from '@/hooks/use-stable-session';
 import { importRepoConfig } from '@/lib/api/github';
+import { useValidationStore } from '@/stores/validation-store';
 import { Folder, Plus, Search } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 
 interface Props {
@@ -14,9 +15,7 @@ interface Props {
 
 export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
   const stableSession = useStableSession();
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  console.log(isLoaded);
+  const setIsValid = useValidationStore((store) => store.setIsValid);
 
   const loadConfigFilePromise = useCallback(
     () =>
@@ -29,12 +28,12 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
 
         if (config === null) {
           setIsConfigDialogOpen(true);
-          setIsLoaded(false);
+          setIsValid(false);
           reject();
         }
 
         resolve(config);
-        setIsLoaded(true);
+        setIsValid(true);
       }),
     [stableSession, repo],
   );
@@ -61,16 +60,17 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <Avatar className="size-5">
-            <AvatarImage src={'https://github.com/moonlitgrace.png'} />
+            <AvatarImage src={stableSession?.user?.image ?? undefined} />
+            <AvatarFallback>{stableSession?.user?.name?.[0]}</AvatarFallback>
           </Avatar>
           <span className="text-muted-foreground/50 text-xl">/</span>
-          <Button variant={'ghost'} className="font-bold" asChild>
+          <Button variant={'ghost'} className="px-2 font-bold" asChild>
             <a
               href={`https://github.com/moonlitgrace/${repo}`}
               target="_blank"
               rel="noreferrer noopener"
             >
-              {repo}
+              @{repo}
             </a>
           </Button>
         </div>
@@ -88,6 +88,11 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
         </div>
       </div>
       <div className="mt-2 divide-y overflow-hidden rounded-md border">
+        <div className="text-muted-foreground bg-secondary/25 grid grid-cols-5 gap-2 p-3 text-xs font-medium">
+          <span className="col-span-2">Name</span>
+          <span className="col-span-2">Last commit message</span>
+          <span className="ml-auto">Last commit date</span>
+        </div>
         <div className="hover:bg-secondary/50 grid grid-cols-5 gap-2 p-3">
           <div className="col-span-2 flex items-center gap-2">
             <Folder className="fill-muted-foreground text-muted-foreground size-4" />
