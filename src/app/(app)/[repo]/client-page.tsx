@@ -13,7 +13,7 @@ export default function ClientPage({ repo }: { repo: string }) {
       <CreateConfigAlertDialog
         open={isConfigDialogOpen}
         setOpen={setIsConfigDialogOpen}
-        repo={repo.slice(1)} // remove "@" prefix
+        repo={repo}
       />
       <RecentActions />
       <RepoContents repo={repo} setIsConfigDialogOpen={setIsConfigDialogOpen} />

@@ -8,20 +8,17 @@ export interface Repo {
 
 // ===== function params ======
 
-export interface FetchReposParams {
+export interface GetReposParams {
   accessToken: string | undefined;
   username: string | undefined;
   query: string;
 }
 
-export interface CheckRepoParams extends Omit<FetchReposParams, 'query'> {
+export interface GetRepoConfigParams extends Omit<GetReposParams, 'query'> {
   repo: Repo['name'];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ImportRepoConfigParams extends CheckRepoParams {}
-
-export interface CreateContentParams extends ImportRepoConfigParams {
+export interface CreateContentParams extends GetRepoConfigParams {
   path: string;
   message: string;
   content: unknown;

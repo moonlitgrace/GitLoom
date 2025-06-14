@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input, InputIcon, InputRoot } from '@/components/ui/input';
 import { useStableSession } from '@/hooks/use-stable-session';
-import { importRepoConfig } from '@/lib/api/github';
+import { getRepoConfig } from '@/lib/api/github';
 import { useValidationStore } from '@/stores/validation-store';
 import { Folder, Plus, Search } from 'lucide-react';
 import { useCallback, useEffect } from 'react';
@@ -19,20 +19,20 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
 
   const loadConfigFilePromise = useCallback(
     () =>
-      new Promise(async (resolve, reject) => {
-        const config = await importRepoConfig({
+      new Promise<void>(async (resolve, reject) => {
+        const config = await getRepoConfig({
           accessToken: stableSession?.accessToken,
           username: stableSession?.user?.username,
           repo: repo,
         });
 
         if (config === null) {
+          reject();
           setIsConfigDialogOpen(true);
           setIsValid(false);
-          reject();
         }
 
-        resolve(config);
+        resolve();
         setIsValid(true);
       }),
     [stableSession, repo],

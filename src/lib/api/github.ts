@@ -1,11 +1,5 @@
 import { CONFIG_PATH } from '@/constants';
-import {
-  CheckRepoParams,
-  CreateContentParams,
-  FetchReposParams,
-  ImportRepoConfigParams,
-  Repo,
-} from '@/types/github';
+import { CreateContentParams, GetRepoConfigParams, GetReposParams, Repo } from '@/types/github';
 
 // constants
 const GITHUB_API_BASE = 'https://api.github.com';
@@ -43,11 +37,7 @@ async function fetchGitHub<T>(
     },
   });
 
-  // 404 case is handled separately
-  if (!res.ok && res.status !== 404) {
-    throw new Error(`GitHub API failed with: ${res.statusText}`);
-  }
-
+  if (!res.ok) throw new Error(`GitHub API failed with: ${res.statusText}`);
   return res.json();
 }
 
@@ -55,11 +45,7 @@ async function fetchGitHub<T>(
  * Fetches list of repos of the authenticated user from github.
  * Response is sorted by updated date and has per_page of 5.
  */
-export async function fetchRepos({
-  accessToken,
-  username,
-  query,
-}: FetchReposParams): Promise<Repo[]> {
+export async function getRepos({ accessToken, username, query }: GetReposParams): Promise<Repo[]> {
   const url = new URL(`${GITHUB_API_BASE}/search/repositories`);
   url.searchParams.set('q', `${query}+user:${username}`);
   url.searchParams.set('sort', 'updated');
@@ -80,36 +66,14 @@ export async function fetchRepos({
 }
 
 /**
- * Checks wheather the repo if accessible or not.
- * Retruns a promise which resolves to a boolean value.
- */
-export async function checkRepo({
-  accessToken,
-  username,
-  repo,
-}: CheckRepoParams): Promise<boolean> {
-  const url = `${GITHUB_API_BASE}/repos/${username}/${repo}`;
-
-  try {
-    const res = await fetch(url, {
-      headers: createAuthHeaders(accessToken),
-    });
-
-    return res.ok;
-  } catch {
-    return false;
-  }
-}
-
-/**
  * Imports the configuration file from the selected repo.
  * Retruns a Promise which resolves to the configuration or null (if not found any).
  */
-export async function importRepoConfig({
+export async function getRepoConfig({
   accessToken,
   username,
   repo,
-}: ImportRepoConfigParams): Promise<unknown | null> {
+}: GetRepoConfigParams): Promise<unknown | null> {
   const url = `${GITHUB_API_BASE}/repos/${username}/${repo}/contents/${CONFIG_PATH}`;
 
   try {

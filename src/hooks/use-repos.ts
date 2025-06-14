@@ -1,4 +1,4 @@
-import { fetchRepos } from '@/lib/api/github';
+import { getRepos } from '@/lib/api/github';
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -14,7 +14,7 @@ export default function useRepos() {
 
   const { data: repos, isLoading } = useQuery({
     queryKey: ['repos', username, debouncedSearch],
-    queryFn: () => fetchRepos({ accessToken, username, query: debouncedSearch }),
+    queryFn: () => getRepos({ accessToken, username, query: debouncedSearch }),
     // only fetch if there is valid session
     enabled: !!session,
   });
