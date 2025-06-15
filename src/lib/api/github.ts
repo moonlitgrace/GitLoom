@@ -125,6 +125,10 @@ export async function createContent({
   }
 }
 
+/**
+ * Returns the contents inside a specific path.
+ * Includes both files and directories.
+ */
 export async function getFolderContents({
   accessToken,
   username,
@@ -138,6 +142,10 @@ export async function getFolderContents({
   return data as Content[];
 }
 
+/**
+ * Returns the last commit for a specific path.
+ * In LastCommit format.
+ */
 export async function getLastCommit({
   accessToken,
   username,

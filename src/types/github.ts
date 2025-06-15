@@ -1,3 +1,5 @@
+// ===== variable types ======
+
 export interface Repo {
   id: number;
   name: string;
@@ -21,22 +23,32 @@ export interface LastCommit {
 
 // ===== function params ======
 
-export interface GetReposParams {
+interface BaseGithubParams {
   accessToken: string | undefined;
   username: string | undefined;
-  query: string;
 }
 
-export interface GetRepoConfigParams extends Omit<GetReposParams, 'query'> {
+// for repo-specific operations
+interface RepoOperationParams extends BaseGithubParams {
   repo: Repo['name'];
 }
 
-export interface CreateContentParams extends GetRepoConfigParams {
+// for content-specific related operations
+interface ContentOperationParams extends RepoOperationParams {
   path: string;
+}
+
+export interface GetReposParams extends BaseGithubParams {
+  query: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface GetRepoConfigParams extends RepoOperationParams {}
+
+export interface CreateContentParams extends ContentOperationParams {
   message: string;
   content: unknown;
 }
 
-export interface GetFolderContents extends GetRepoConfigParams {
-  path: string;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface GetFolderContents extends ContentOperationParams {}
