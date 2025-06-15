@@ -134,7 +134,8 @@ export async function getFolderContents({
   const url = `${GITHUB_API_BASE}/repos/${username}/${repo}/contents/${path}`;
 
   const data = await fetchGitHub(url, accessToken);
-  console.log(data);
+  // NOTE: define proper types
+  return data as Content[];
 }
 
 export async function getLastCommit({
