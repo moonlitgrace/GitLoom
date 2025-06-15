@@ -3,10 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Input, InputIcon, InputRoot } from '@/components/ui/input';
 import { useStableSession } from '@/hooks/use-stable-session';
 import { getRepoConfig } from '@/lib/api/github';
-import { useValidationStore } from '@/stores/validation-store';
-import { Config } from '@/types/config';
+import { useRepoStore } from '@/stores/repo.store';
 import { Folder, Plus, Search } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 
 interface Props {
@@ -16,11 +15,7 @@ interface Props {
 
 export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
   const stableSession = useStableSession();
-  const setIsValid = useValidationStore((store) => store.setIsValid);
-  const [config, setConfig] = useState<Config | null>(null);
-
-  // remote this later
-  console.log(config);
+  const { setConfig, setIsValid } = useRepoStore((state) => state);
 
   const loadConfigFilePromise = useCallback(
     () =>
