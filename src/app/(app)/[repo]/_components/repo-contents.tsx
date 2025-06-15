@@ -1,15 +1,15 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input, InputIcon, InputRoot } from '@/components/ui/input';
-import { Skeleton } from '@/components/ui/skeleton';
 import useRepoContents from '@/hooks/use-repo-contents';
 import { useStableSession } from '@/hooks/use-stable-session';
 import { getRepoConfig } from '@/lib/api/github';
-import datetime from '@/lib/date-time';
 import { useRepoStore } from '@/stores/repo.store';
-import { Folder, Plus, Search } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import { useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
+import ContentItem from './content-item';
+import ContentsSkeleton from './contents-skeleton';
 
 interface Props {
   repo: string;
@@ -99,33 +99,18 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
           <span className="col-span-2">Last commit message</span>
           <span className="ml-auto">Last commit date</span>
         </div>
-        {(isLoading || status === 'loading' || !contents) &&
-          Array.from({ length: 1 }).map((_, idx) => (
-            <div key={idx} className="grid grid-cols-5 gap-2 p-3">
-              <Skeleton className="col-span-2 h-5 w-20" />
-              <Skeleton className="col-span-2 h-5 w-3/4" />
-              <Skeleton className="col-span-1 ml-auto h-5 w-15" />
-            </div>
-          ))}
-        {contents?.map((content) => (
-          <div key={content.path} className="hover:bg-secondary/50 grid grid-cols-5 gap-2 p-3">
-            <div className="col-span-2 flex items-center gap-2">
-              <Folder className="fill-muted-foreground text-muted-foreground size-4" />
-              <button className="text-sm hover:underline">{content.name}</button>
-            </div>
-            <a
-              href={`https://github.com/${session?.user?.username}/${repo}/commit/${content.lastCommit.sha}`}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="text-muted-foreground col-span-2 text-sm hover:underline"
-            >
-              {content.lastCommit.message}
-            </a>
-            <span className="text-muted-foreground ml-auto text-sm">
-              {datetime(content.lastCommit.date).fromNow()}
-            </span>
-          </div>
-        ))}
+        {isLoading || status === 'loading' || !contents ? (
+          <ContentsSkeleton />
+        ) : (
+          contents.map((content) => (
+            <ContentItem
+              key={content.path}
+              username={session?.user?.username}
+              repo={repo}
+              content={content}
+            />
+          ))
+        )}
       </div>
     </div>
   );
