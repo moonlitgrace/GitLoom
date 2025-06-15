@@ -5,13 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 import { useStableSession } from './use-stable-session';
 
 export default function useRepoContents(repo: string) {
-  const stableSession = useStableSession();
+  const { session } = useStableSession();
   const { config } = useRepoStore((state) => state);
 
   async function getRootContent(path: string): Promise<Content> {
     const lastCommit = await getLastCommit({
-      accessToken: stableSession?.accessToken,
-      username: stableSession?.user?.username,
+      accessToken: session?.accessToken,
+      username: session?.user?.username,
       repo,
       path,
     });

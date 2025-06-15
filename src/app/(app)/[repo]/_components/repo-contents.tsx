@@ -8,7 +8,6 @@ import { getRepoConfig } from '@/lib/api/github';
 import datetime from '@/lib/date-time';
 import { useRepoStore } from '@/stores/repo.store';
 import { Folder, Plus, Search } from 'lucide-react';
-import { useSession } from 'next-auth/react';
 import { useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 
@@ -18,8 +17,7 @@ interface Props {
 }
 
 export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
-  const { status } = useSession();
-  const stableSession = useStableSession();
+  const { session, status } = useStableSession();
   const { setConfig, setIsValid } = useRepoStore((state) => state);
   const { contents, isLoading } = useRepoContents(repo);
 
@@ -27,8 +25,8 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
     () =>
       new Promise<void>(async (resolve, reject) => {
         const _config = await getRepoConfig({
-          accessToken: stableSession?.accessToken,
-          username: stableSession?.user?.username,
+          accessToken: session?.accessToken,
+          username: session?.user?.username,
           repo,
         });
 
@@ -42,11 +40,11 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
           setIsValid(true);
         }
       }),
-    [stableSession, repo, setIsConfigDialogOpen, setIsValid, setConfig],
+    [session, repo, setIsConfigDialogOpen, setIsValid, setConfig],
   );
 
   useEffect(() => {
-    if (!stableSession) return;
+    if (!session) return;
 
     // call toast to init config
     // and show some feedback
@@ -61,15 +59,15 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
         description: 'Failed to load repo config file.',
       },
     });
-  }, [stableSession, loadConfigFilePromise]);
+  }, [session, loadConfigFilePromise]);
 
   return (
     <div className="col-span-2 flex flex-col gap-2">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <Avatar className="size-5">
-            <AvatarImage src={stableSession?.user?.image ?? undefined} />
-            <AvatarFallback>{stableSession?.user?.name?.[0]}</AvatarFallback>
+            <AvatarImage src={session?.user?.image ?? undefined} />
+            <AvatarFallback>{session?.user?.name?.[0]}</AvatarFallback>
           </Avatar>
           <span className="text-muted-foreground/50 text-xl">/</span>
           <Button variant={'ghost'} className="px-2 font-bold" asChild>
@@ -116,7 +114,7 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
               <button className="text-sm hover:underline">{content.name}</button>
             </div>
             <a
-              href={`https://github.com/${stableSession?.user?.username}/${repo}/commit/${content.lastCommit.sha}`}
+              href={`https://github.com/${session?.user?.username}/${repo}/commit/${content.lastCommit.sha}`}
               target="_blank"
               rel="noreferrer noopener"
               className="text-muted-foreground col-span-2 text-sm hover:underline"
