@@ -4,8 +4,9 @@ import { Input, InputIcon, InputRoot } from '@/components/ui/input';
 import { useStableSession } from '@/hooks/use-stable-session';
 import { getRepoConfig } from '@/lib/api/github';
 import { useValidationStore } from '@/stores/validation-store';
+import { Config } from '@/types/config';
 import { Folder, Plus, Search } from 'lucide-react';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 interface Props {
@@ -16,32 +17,38 @@ interface Props {
 export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
   const stableSession = useStableSession();
   const setIsValid = useValidationStore((store) => store.setIsValid);
+  const [config, setConfig] = useState<Config | null>(null);
+
+  // remote this later
+  console.log(config);
 
   const loadConfigFilePromise = useCallback(
     () =>
       new Promise<void>(async (resolve, reject) => {
-        const config = await getRepoConfig({
+        const _config = await getRepoConfig({
           accessToken: stableSession?.accessToken,
           username: stableSession?.user?.username,
           repo: repo,
         });
 
-        if (config === null) {
+        if (_config === null) {
           reject();
           setIsConfigDialogOpen(true);
           setIsValid(false);
+        } else {
+          resolve();
+          setConfig(_config);
+          setIsValid(true);
         }
-
-        resolve();
-        setIsValid(true);
       }),
-    [stableSession, repo],
+    [stableSession, repo, setIsConfigDialogOpen, setIsValid],
   );
 
   useEffect(() => {
-    if (!stableSession || !repo) return;
+    if (!stableSession) return;
 
-    // call toast to init config load and show some feedback
+    // call toast to init config
+    // and show some feedback
     toast.promise(loadConfigFilePromise, {
       loading: 'Loading config file...',
       success: {
@@ -53,7 +60,7 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
         description: 'Failed to load repo config file.',
       },
     });
-  }, [stableSession, loadConfigFilePromise, repo]);
+  }, [stableSession, loadConfigFilePromise]);
 
   return (
     <div className="col-span-2 flex flex-col gap-2">

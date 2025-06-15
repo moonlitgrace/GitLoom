@@ -1,4 +1,5 @@
 import { CONFIG_PATH } from '@/constants';
+import { Config } from '@/types/config';
 import { CreateContentParams, GetRepoConfigParams, GetReposParams, Repo } from '@/types/github';
 
 // constants
@@ -73,12 +74,13 @@ export async function getRepoConfig({
   accessToken,
   username,
   repo,
-}: GetRepoConfigParams): Promise<unknown | null> {
+}: GetRepoConfigParams): Promise<Config | null> {
   const url = `${GITHUB_API_BASE}/repos/${username}/${repo}/contents/${CONFIG_PATH}`;
 
   try {
-    const data = await fetchGitHub(url, accessToken);
-    return data;
+    const data: { content: string } = await fetchGitHub(url, accessToken);
+    const decodedContent = atob(data.content);
+    return JSON.parse(decodedContent);
   } catch {
     return null;
   }
