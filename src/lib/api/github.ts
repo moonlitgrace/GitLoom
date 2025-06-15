@@ -1,5 +1,14 @@
 import { CONFIG_PATH } from '@/constants';
-import { CreateContentParams, GetRepoConfigParams, GetReposParams, Repo } from '@/types/github';
+import { Config } from '@/types/config';
+import {
+  Content,
+  CreateContentParams,
+  GetFolderContents,
+  GetRepoConfigParams,
+  GetReposParams,
+  LastCommit,
+  Repo,
+} from '@/types/github';
 
 // constants
 const GITHUB_API_BASE = 'https://api.github.com';
@@ -73,12 +82,13 @@ export async function getRepoConfig({
   accessToken,
   username,
   repo,
-}: GetRepoConfigParams): Promise<unknown | null> {
+}: GetRepoConfigParams): Promise<Config | null> {
   const url = `${GITHUB_API_BASE}/repos/${username}/${repo}/contents/${CONFIG_PATH}`;
 
   try {
-    const data = await fetchGitHub(url, accessToken);
-    return data;
+    const data: { content: string } = await fetchGitHub(url, accessToken);
+    const decodedContent = atob(data.content);
+    return JSON.parse(decodedContent);
   } catch {
     return null;
   }
@@ -113,4 +123,45 @@ export async function createContent({
   } catch {
     return false;
   }
+}
+
+/**
+ * Returns the contents inside a specific path.
+ * Includes both files and directories.
+ */
+export async function getFolderContents({
+  accessToken,
+  username,
+  repo,
+  path,
+}: GetFolderContents): Promise<Content[]> {
+  const url = `${GITHUB_API_BASE}/repos/${username}/${repo}/contents/${path}`;
+
+  const data = await fetchGitHub(url, accessToken);
+  // NOTE: define proper types
+  return data as Content[];
+}
+
+/**
+ * Returns the last commit for a specific path.
+ * In LastCommit format.
+ */
+export async function getLastCommit({
+  accessToken,
+  username,
+  repo,
+  path,
+}: GetFolderContents): Promise<LastCommit> {
+  const url = new URL(`${GITHUB_API_BASE}/repos/${username}/${repo}/commits`);
+  url.searchParams.set('path', path);
+  url.searchParams.set('per_page', '1');
+
+  const data = await fetchGitHub<unknown>(decodeURIComponent(url.toString()), accessToken);
+  // @ts-expect-error: TODO: add real GitHub types
+  const commit = data[0];
+  return {
+    message: commit.commit.message,
+    date: commit.commit.committer.date,
+    sha: commit.sha,
+  };
 }

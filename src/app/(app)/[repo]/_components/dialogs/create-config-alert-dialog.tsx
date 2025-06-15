@@ -13,12 +13,12 @@ import { CONFIG_PATH, DEFAULT_CONFIG } from '@/constants';
 import { createContent } from '@/lib/api/github';
 import { Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 interface Props {
   open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   repo: string;
 }
 
@@ -48,8 +48,8 @@ export default function CreateConfigAlertDialog({ open, setOpen, repo }: Props) 
         description: `Could not create ${CONFIG_PATH}.`,
       });
     } finally {
-      setIsCreating(false);
-      setOpen(false);
+      // reload window to re-fetch states
+      window.location.reload();
     }
   }
 
@@ -72,11 +72,17 @@ export default function CreateConfigAlertDialog({ open, setOpen, repo }: Props) 
               <p className="text-sm font-medium">Auto-generated configuration</p>
               <p className="text-muted-foreground text-xs">Will create default config with:</p>
               <ul className="text-muted-foreground mt-1 ml-4 list-disc text-xs">
-                <li>Latest version</li>
-                <li>Contents and its locations</li>
+                <li>
+                  <code>$schema</code>
+                </li>
+                <li>
+                  <code>__v</code> - Latest version
+                </li>
+                <li>
+                  <code>contentTypes</code> - Content Types with path and extension
+                </li>
               </ul>
             </div>
-            <span className="text-muted-foreground text-xs">Just now</span>
           </div>
         </AlertDialogHeader>
         <AlertDialogFooter className="gap-4">

@@ -1,10 +1,14 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input, InputIcon, InputRoot } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import useRepoContents from '@/hooks/use-repo-contents';
 import { useStableSession } from '@/hooks/use-stable-session';
 import { getRepoConfig } from '@/lib/api/github';
-import { useValidationStore } from '@/stores/validation-store';
+import datetime from '@/lib/date-time';
+import { useRepoStore } from '@/stores/repo.store';
 import { Folder, Plus, Search } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 
@@ -14,34 +18,38 @@ interface Props {
 }
 
 export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
+  const { status } = useSession();
   const stableSession = useStableSession();
-  const setIsValid = useValidationStore((store) => store.setIsValid);
+  const { setConfig, setIsValid } = useRepoStore((state) => state);
+  const { contents, isLoading } = useRepoContents(repo);
 
   const loadConfigFilePromise = useCallback(
     () =>
       new Promise<void>(async (resolve, reject) => {
-        const config = await getRepoConfig({
+        const _config = await getRepoConfig({
           accessToken: stableSession?.accessToken,
           username: stableSession?.user?.username,
-          repo: repo,
+          repo,
         });
 
-        if (config === null) {
+        if (_config === null) {
           reject();
           setIsConfigDialogOpen(true);
           setIsValid(false);
+        } else {
+          resolve();
+          setConfig(_config);
+          setIsValid(true);
         }
-
-        resolve();
-        setIsValid(true);
       }),
-    [stableSession, repo],
+    [stableSession, repo, setIsConfigDialogOpen, setIsValid, setConfig],
   );
 
   useEffect(() => {
-    if (!stableSession || !repo) return;
+    if (!stableSession) return;
 
-    // call toast to init config load and show some feedback
+    // call toast to init config
+    // and show some feedback
     toast.promise(loadConfigFilePromise, {
       loading: 'Loading config file...',
       success: {
@@ -53,7 +61,7 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
         description: 'Failed to load repo config file.',
       },
     });
-  }, [stableSession, loadConfigFilePromise, repo]);
+  }, [stableSession, loadConfigFilePromise]);
 
   return (
     <div className="col-span-2 flex flex-col gap-2">
@@ -93,21 +101,33 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
           <span className="col-span-2">Last commit message</span>
           <span className="ml-auto">Last commit date</span>
         </div>
-        <div className="hover:bg-secondary/50 grid grid-cols-5 gap-2 p-3">
-          <div className="col-span-2 flex items-center gap-2">
-            <Folder className="fill-muted-foreground text-muted-foreground size-4" />
-            <button className="text-sm hover:underline">.gitloom</button>
+        {(isLoading || status === 'loading' || !contents) &&
+          Array.from({ length: 1 }).map((_, idx) => (
+            <div key={idx} className="grid grid-cols-5 gap-2 p-3">
+              <Skeleton className="col-span-2 h-5 w-20" />
+              <Skeleton className="col-span-2 h-5 w-3/4" />
+              <Skeleton className="col-span-1 ml-auto h-5 w-15" />
+            </div>
+          ))}
+        {contents?.map((content) => (
+          <div key={content.path} className="hover:bg-secondary/50 grid grid-cols-5 gap-2 p-3">
+            <div className="col-span-2 flex items-center gap-2">
+              <Folder className="fill-muted-foreground text-muted-foreground size-4" />
+              <button className="text-sm hover:underline">{content.name}</button>
+            </div>
+            <a
+              href={`https://github.com/${stableSession?.user?.username}/${repo}/commit/${content.lastCommit.sha}`}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="text-muted-foreground col-span-2 text-sm hover:underline"
+            >
+              {content.lastCommit.message}
+            </a>
+            <span className="text-muted-foreground ml-auto text-sm">
+              {datetime(content.lastCommit.date).fromNow()}
+            </span>
           </div>
-          <a
-            href="https://github.com/GitLoomLabs/GitLoom/commit/ca72cffb748c9e9be0a5db83604ebbe81506946f"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="text-muted-foreground col-span-2 text-sm hover:underline"
-          >
-            chore: update .gitloom settings
-          </a>
-          <span className="text-muted-foreground ml-auto text-sm">2 hours ago</span>
-        </div>
+        ))}
       </div>
     </div>
   );

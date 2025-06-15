@@ -3,7 +3,7 @@
 import GitLoomIcon from '@/components/icons/gitloom';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { useValidationStore } from '@/stores/validation-store';
+import { useRepoStore } from '@/stores/repo.store';
 import { ChevronsUpDown } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -14,7 +14,7 @@ export default function Header() {
   const { data: session } = useSession();
   const pathname = usePathname();
   const { repo } = useParams<{ repo: string }>();
-  const isValid = useValidationStore((store) => store.isValid);
+  const isValid = useRepoStore((store) => store.isValid);
 
   const isNewPath = pathname === '/new';
 
