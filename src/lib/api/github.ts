@@ -1,6 +1,14 @@
 import { CONFIG_PATH } from '@/constants';
 import { Config } from '@/types/config';
-import { CreateContentParams, GetRepoConfigParams, GetReposParams, Repo } from '@/types/github';
+import {
+  Content,
+  CreateContentParams,
+  GetFolderContents,
+  GetRepoConfigParams,
+  GetReposParams,
+  LastCommit,
+  Repo,
+} from '@/types/github';
 
 // constants
 const GITHUB_API_BASE = 'https://api.github.com';
@@ -115,4 +123,36 @@ export async function createContent({
   } catch {
     return false;
   }
+}
+
+export async function getFolderContents({
+  accessToken,
+  username,
+  repo,
+  path,
+}: GetFolderContents): Promise<Content[]> {
+  const url = `${GITHUB_API_BASE}/repos/${username}/${repo}/contents/${path}`;
+
+  const data = await fetchGitHub(url, accessToken);
+  console.log(data);
+}
+
+export async function getLastCommit({
+  accessToken,
+  username,
+  repo,
+  path,
+}: GetFolderContents): Promise<LastCommit> {
+  const url = new URL(`${GITHUB_API_BASE}/repos/${username}/${repo}/commits`);
+  url.searchParams.set('path', path);
+  url.searchParams.set('per_page', '1');
+
+  const data = await fetchGitHub<unknown>(decodeURIComponent(url.toString()), accessToken);
+  // @ts-expect-error: TODO: add real GitHub types
+  const commit = data[0];
+  return {
+    message: commit.commit.message,
+    date: commit.commit.committer.date,
+    sha: commit.sha,
+  };
 }

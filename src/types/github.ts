@@ -6,6 +6,19 @@ export interface Repo {
   html_url: string;
 }
 
+export interface Content {
+  name: string;
+  path: string;
+  type: 'file' | 'dir';
+  lastCommit: LastCommit;
+}
+
+export interface LastCommit {
+  message: string;
+  date: string;
+  sha: string;
+}
+
 // ===== function params ======
 
 export interface GetReposParams {
@@ -22,4 +35,8 @@ export interface CreateContentParams extends GetRepoConfigParams {
   path: string;
   message: string;
   content: unknown;
+}
+
+export interface GetFolderContents extends GetRepoConfigParams {
+  path: string;
 }

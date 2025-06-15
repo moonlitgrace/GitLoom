@@ -13,12 +13,12 @@ import { CONFIG_PATH, DEFAULT_CONFIG } from '@/constants';
 import { createContent } from '@/lib/api/github';
 import { Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 interface Props {
   open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   repo: string;
 }
 
