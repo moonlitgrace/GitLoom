@@ -1,13 +1,15 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input, InputIcon, InputRoot } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import useRepoContents from '@/hooks/use-repo-contents';
 import { useStableSession } from '@/hooks/use-stable-session';
-import { getLastCommit, getRepoConfig } from '@/lib/api/github';
+import { getRepoConfig } from '@/lib/api/github';
 import datetime from '@/lib/date-time';
 import { useRepoStore } from '@/stores/repo.store';
-import { Content } from '@/types/github';
 import { Folder, Plus, Search } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 
 interface Props {
@@ -16,10 +18,10 @@ interface Props {
 }
 
 export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
+  const { status } = useSession();
   const stableSession = useStableSession();
-  const { setConfig, setIsValid, config } = useRepoStore((state) => state);
-  // const [currentPath, setCurrentPath] = useState<string>('');
-  const [contents, setContents] = useState<Content[]>([]);
+  const { setConfig, setIsValid } = useRepoStore((state) => state);
+  const { contents, isLoading } = useRepoContents(repo);
 
   const loadConfigFilePromise = useCallback(
     () =>
@@ -61,34 +63,6 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
     });
   }, [stableSession, loadConfigFilePromise]);
 
-  useEffect(() => {
-    if (config === null) return;
-
-    async function getRootContent(path: string): Promise<Content> {
-      const lastCommit = await getLastCommit({
-        accessToken: stableSession?.accessToken,
-        username: stableSession?.user?.username,
-        repo,
-        path,
-      });
-
-      return {
-        lastCommit,
-        name: path,
-        path,
-        type: 'dir',
-      };
-    }
-
-    const paths = [...Object.values(config.contentTypes).map((item) => item.path), '.gitloom'];
-    async function initRootContents() {
-      const rootContents = await Promise.all(paths.map((path) => getRootContent(path)));
-      setContents(rootContents);
-    }
-
-    initRootContents();
-  }, [config, stableSession, repo]);
-
   return (
     <div className="col-span-2 flex flex-col gap-2">
       <div className="flex items-center gap-4">
@@ -127,7 +101,15 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
           <span className="col-span-2">Last commit message</span>
           <span className="ml-auto">Last commit date</span>
         </div>
-        {contents.map((content) => (
+        {(isLoading || status === 'loading' || !contents) &&
+          Array.from({ length: 1 }).map((_, idx) => (
+            <div key={idx} className="grid grid-cols-5 gap-2 p-3">
+              <Skeleton className="col-span-2 h-5 w-20" />
+              <Skeleton className="col-span-2 h-5 w-3/4" />
+              <Skeleton className="col-span-1 ml-auto h-5 w-15" />
+            </div>
+          ))}
+        {contents?.map((content) => (
           <div key={content.path} className="hover:bg-secondary/50 grid grid-cols-5 gap-2 p-3">
             <div className="col-span-2 flex items-center gap-2">
               <Folder className="fill-muted-foreground text-muted-foreground size-4" />
