@@ -4,7 +4,7 @@ import GitLoomIcon from '@/components/icons/gitloom';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useRepoStore } from '@/stores/repo.store';
-import { ChevronsUpDown } from 'lucide-react';
+import { ChevronsUpDown, MessageSquareQuote } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
@@ -27,7 +27,7 @@ export default function Header() {
         {!isNewPath && (
           <>
             <span className="text-muted-foreground/50 text-xl">/</span>
-            <Button variant={'ghost'} className="gap-2" disabled={!isValid}>
+            <Button variant={'ghost'} className="gap-2 px-2!" disabled={!isValid}>
               <Avatar className="size-5">
                 <AvatarImage src={session?.user?.image ?? undefined} />
                 <AvatarFallback>{session?.user?.name?.[0]}</AvatarFallback>
@@ -39,7 +39,9 @@ export default function Header() {
         )}
       </nav>
       <div className="flex items-center gap-4">
-        <Button variant={'outline'}>Feedback</Button>
+        <Button variant={'outline'}>
+          <MessageSquareQuote className="text-muted-foreground size-4" /> Feedback
+        </Button>
         <UserDropdown></UserDropdown>
       </div>
     </header>
