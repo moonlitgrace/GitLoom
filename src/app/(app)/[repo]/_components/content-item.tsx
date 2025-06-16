@@ -7,10 +7,19 @@ interface Props {
   username: string | undefined;
   repo: string;
   content: Content;
+  setCurrentPath: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function ContentItem({ username, repo, content }: Props) {
+export default function ContentItem({ username, repo, content, setCurrentPath }: Props) {
   const Icon = content.type === 'dir' ? Folder : File;
+
+  function handleClick() {
+    if (content.type === 'dir') {
+      setCurrentPath(content.path);
+    } else {
+      // handle file click
+    }
+  }
 
   return (
     <div key={content.path} className="hover:bg-secondary/50 grid grid-cols-5 gap-2 p-3">
@@ -21,7 +30,9 @@ export default function ContentItem({ username, repo, content }: Props) {
             content.type === 'dir' && 'fill-muted-foreground',
           )}
         />
-        <button className="text-sm hover:underline">{content.name}</button>
+        <button className="text-sm hover:underline" onClick={handleClick}>
+          {content.name}
+        </button>
       </div>
       <a
         href={`https://github.com/${username}/${repo}/commit/${content.lastCommit.sha}`}

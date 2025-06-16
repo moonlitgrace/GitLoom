@@ -19,7 +19,7 @@ interface Props {
 export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
   const { session, status } = useStableSession();
   const { setConfig, setIsValid } = useRepoStore((state) => state);
-  const { contents, isLoading } = useRepoContents(repo);
+  const { contents, isLoading, currentPath, setCurrentPath } = useRepoContents(repo);
 
   const loadConfigFilePromise = useCallback(
     () =>
@@ -93,6 +93,9 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
           </Button>
         </div>
       </div>
+      {/* debug */}
+      <div className="text-muted-foreground text-sm">Current path: {currentPath}</div>
+      {/* debug */}
       <div className="mt-2 divide-y overflow-hidden rounded-md border">
         <div className="text-muted-foreground bg-secondary/25 grid grid-cols-5 gap-2 p-3 text-xs font-medium">
           <span className="col-span-2">Name</span>
@@ -108,6 +111,7 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
               username={session?.user?.username}
               repo={repo}
               content={content}
+              setCurrentPath={setCurrentPath}
             />
           ))
         )}
