@@ -1,4 +1,3 @@
-import { generateMetadataTitleFor } from '@/lib/utils';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ClientPage from './client-page';
@@ -12,7 +11,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const repo = decodeURIComponent(rawRepo);
 
   return {
-    title: generateMetadataTitleFor(repo),
+    title: repo,
   };
 }
 

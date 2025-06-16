@@ -4,13 +4,12 @@ import GitlabIcon from '@/components/icons/gitlab';
 import GitLoomIcon from '@/components/icons/gitloom';
 import GitLoomTextIcon from '@/components/icons/gitloom-text';
 import { Button } from '@/components/ui/button';
-import { generateMetadataTitleFor } from '@/lib/utils';
 import { Box, FolderLock, ShieldCheck, WandSparkles } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: generateMetadataTitleFor('Login'),
+  title: 'Login – GitLoom',
 };
 
 export default async function Page() {
