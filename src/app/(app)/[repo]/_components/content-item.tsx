@@ -7,15 +7,15 @@ interface Props {
   username: string | undefined;
   repo: string;
   content: Content;
-  setCurrentPath: React.Dispatch<React.SetStateAction<string>>;
+  navigateTo: (path: string) => void;
 }
 
-export default function ContentItem({ username, repo, content, setCurrentPath }: Props) {
+export default function ContentItem({ username, repo, content, navigateTo }: Props) {
   const Icon = content.type === 'dir' ? Folder : File;
 
   function handleClick() {
     if (content.type === 'dir') {
-      setCurrentPath(content.path);
+      navigateTo(content.path);
     } else {
       // handle file click
     }

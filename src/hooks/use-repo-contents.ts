@@ -8,7 +8,10 @@ import { useStableSession } from './use-stable-session';
 export default function useRepoContents(repo: string) {
   const { session } = useStableSession();
   const { config } = useRepoStore((state) => state);
-  const [currentPath, setCurrentPath] = useState('<root>');
+
+  const [history, setHistory] = useState<string[]>(['<root>']);
+  const currentPath = history[history.length - 1];
+  const canGoBack = history.length > 1;
 
   const fetchParams = useMemo(
     () => ({
@@ -62,5 +65,30 @@ export default function useRepoContents(repo: string) {
     enabled: !!config,
   });
 
-  return { contents, isLoading, currentPath, setCurrentPath };
+  const navigateTo = useCallback((path: string) => {
+    setHistory((prev) => [...prev, path]);
+  }, []);
+
+  const navigateBack = useCallback(() => {
+    setHistory((prev) => prev.slice(0, prev.length - 1));
+  }, []);
+
+  const navigateBackTo = useCallback((path: string) => {
+    setHistory((prev) => {
+      const targetIdx = prev.findIndex((p) => p === path);
+      if (targetIdx === -1) return prev;
+
+      return prev.slice(0, targetIdx + 1);
+    });
+  }, []);
+
+  return {
+    contents,
+    isLoading,
+    currentPath,
+    navigateTo,
+    navigateBack,
+    navigateBackTo,
+    canGoBack,
+  };
 }
