@@ -129,7 +129,7 @@ export async function createContent({
  * Returns the contents inside a specific path.
  * Includes both files and directories.
  */
-export async function getFolderContents({
+export async function getPathContents({
   accessToken,
   username,
   repo,

@@ -5,7 +5,7 @@ import useRepoContents from '@/hooks/use-repo-contents';
 import { useStableSession } from '@/hooks/use-stable-session';
 import { getRepoConfig } from '@/lib/api/github';
 import { useRepoStore } from '@/stores/repo.store';
-import { Plus, Search } from 'lucide-react';
+import { Folder, Plus, Search } from 'lucide-react';
 import { useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 import ContentItem from './content-item';
@@ -19,7 +19,7 @@ interface Props {
 export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
   const { session, status } = useStableSession();
   const { setConfig, setIsValid } = useRepoStore((state) => state);
-  const { contents, isLoading } = useRepoContents(repo);
+  const { contents, isLoading, navigateTo, navigateBack, canGoBack } = useRepoContents(repo);
 
   const loadConfigFilePromise = useCallback(
     () =>
@@ -99,6 +99,15 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
           <span className="col-span-2">Last commit message</span>
           <span className="ml-auto">Last commit date</span>
         </div>
+        {canGoBack && (
+          <button
+            className="hover:bg-secondary/50 flex w-full items-center gap-2 p-3"
+            onClick={navigateBack}
+          >
+            <Folder className="text-muted-foreground fill-muted-foreground size-4" />
+            <span className="text-muted-foreground text-sm">..</span>
+          </button>
+        )}
         {isLoading || status === 'loading' || !contents ? (
           <ContentsSkeleton />
         ) : (
@@ -108,6 +117,7 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
               username={session?.user?.username}
               repo={repo}
               content={content}
+              navigateTo={navigateTo}
             />
           ))
         )}
