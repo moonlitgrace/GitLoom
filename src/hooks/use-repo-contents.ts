@@ -82,6 +82,16 @@ export default function useRepoContents(repo: string) {
     });
   }, []);
 
+  const breadcrumbs = useMemo(() => {
+    if (currentPath === '<root>') return [];
+
+    const parts = currentPath.split('/');
+    return parts.reduce<Array<{ name: string; path: string }>>((acc, part, idx) => {
+      const path = idx === 0 ? part : `${parts[idx - 1]}/${part}`;
+      return [...acc, { name: part, path }];
+    }, []);
+  }, [currentPath]);
+
   return {
     contents,
     isLoading,
@@ -90,5 +100,6 @@ export default function useRepoContents(repo: string) {
     navigateBack,
     navigateBackTo,
     canGoBack,
+    breadcrumbs,
   };
 }
