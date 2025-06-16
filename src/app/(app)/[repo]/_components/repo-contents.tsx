@@ -19,7 +19,8 @@ interface Props {
 export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
   const { session, status } = useStableSession();
   const { setConfig, setIsValid } = useRepoStore((state) => state);
-  const { contents, isLoading, navigateTo, navigateBack, canGoBack } = useRepoContents(repo);
+  const { contents, isLoading, navigateTo, navigateBack, canGoBack, breadcrumbs, navigateBackTo } =
+    useRepoContents(repo);
 
   const loadConfigFilePromise = useCallback(
     () =>
@@ -69,18 +70,26 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
             <AvatarImage src={session?.user?.image ?? undefined} />
             <AvatarFallback>{session?.user?.name?.[0]}</AvatarFallback>
           </Avatar>
-          <span className="text-muted-foreground/50 text-xl">/</span>
-          <Button variant={'ghost'} className="px-2 font-bold" asChild>
-            <a
-              href={`https://github.com/moonlitgrace/${repo}`}
-              target="_blank"
-              rel="noreferrer noopener"
+          <span className="text-muted-foreground/50">/</span>
+          <button
+            className="text-sm font-bold hover:underline"
+            onClick={() => navigateBackTo('<root>')}
+          >
+            @{repo}
+          </button>
+          {breadcrumbs.length > 0 && <span className="text-muted-foreground/50">/</span>}
+          {breadcrumbs.map((crumb, idx) => (
+            <button
+              key={idx}
+              className="text-muted-foreground text-sm"
+              disabled={idx === breadcrumbs.length - 1}
+              onClick={() => navigateBackTo(crumb.path)}
             >
-              @{repo}
-            </a>
-          </Button>
+              {crumb.name}
+            </button>
+          ))}
         </div>
-        <div className="flex flex-1 items-center gap-4">
+        <div className="ml-auto flex items-center gap-4">
           <InputRoot>
             <InputIcon>
               <Search />
