@@ -9,7 +9,7 @@ import { Folder, Plus, Search } from 'lucide-react';
 import { useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 import ContentItem from './content-item';
-import ContentsSkeleton from './contents-skeleton';
+import RepoContentsSkeleton from './repo-contents-skeleton';
 
 interface Props {
   repo: string;
@@ -118,7 +118,7 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
           </button>
         )}
         {isLoading || status === 'loading' || !contents ? (
-          <ContentsSkeleton />
+          <RepoContentsSkeleton />
         ) : (
           contents.map((content) => (
             <ContentItem
