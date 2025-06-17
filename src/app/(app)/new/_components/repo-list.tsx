@@ -73,8 +73,8 @@ export default function RepoList() {
             <span className="text-muted-foreground text-sm">
               {datetime(repo.updated_at).fromNow()}
             </span>
-            <Button asChild className="ml-auto">
-              <Link href={`/@${repo.name}`}>Import</Link>
+            <Button className="ml-auto" asChild>
+              <Link href={`/~/${repo.name}`}>Import</Link>
             </Button>
           </div>
         ))}

@@ -9,11 +9,11 @@ import { Folder, Plus, Search } from 'lucide-react';
 import { useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 import ContentItem from './content-item';
-import ContentsSkeleton from './contents-skeleton';
+import RepoContentsSkeleton from './repo-contents-skeleton';
 
 interface Props {
   repo: string;
-  setIsConfigDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsConfigDialogOpen: (val: boolean) => void;
 }
 
 export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
@@ -65,7 +65,7 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
   return (
     <div className="col-span-2 flex flex-col gap-2">
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
+        <div className="flex items-end gap-2">
           <Avatar className="size-5">
             <AvatarImage src={session?.user?.image ?? undefined} />
             <AvatarFallback>{session?.user?.name?.[0]}</AvatarFallback>
@@ -75,7 +75,7 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
             className="text-sm font-bold hover:underline"
             onClick={() => navigateBackTo('<root>')}
           >
-            @{repo}
+            {repo}
           </button>
           {breadcrumbs.length > 0 && <span className="text-muted-foreground/50">/</span>}
           {breadcrumbs.map((crumb, idx) => (
@@ -118,7 +118,7 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
           </button>
         )}
         {isLoading || status === 'loading' || !contents ? (
-          <ContentsSkeleton />
+          <RepoContentsSkeleton />
         ) : (
           contents.map((content) => (
             <ContentItem
