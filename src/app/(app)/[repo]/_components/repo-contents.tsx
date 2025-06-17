@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input, InputIcon, InputRoot } from '@/components/ui/input';
+import useRecentRepos from '@/hooks/use-recent-repos';
 import useRepoContents from '@/hooks/use-repo-contents';
 import { useStableSession } from '@/hooks/use-stable-session';
 import { getRepoConfig } from '@/lib/api/github';
@@ -21,6 +22,7 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
   const { setConfig, setIsValid } = useRepoStore((state) => state);
   const { contents, isLoading, navigateTo, navigateBack, canGoBack, breadcrumbs, navigateBackTo } =
     useRepoContents(repo);
+  const { addRecentRepo } = useRecentRepos();
 
   const loadConfigFilePromise = useCallback(
     () =>
@@ -33,12 +35,13 @@ export default function RepoContents({ repo, setIsConfigDialogOpen }: Props) {
 
         if (_config === null) {
           reject();
-          setIsConfigDialogOpen(true);
-          setIsValid(false);
+          setIsConfigDialogOpen(true); // open dialog to create config
+          setIsValid(false); // make invalid
         } else {
           resolve();
           setConfig(_config);
-          setIsValid(true);
+          setIsValid(true); // make currrent repo valid
+          addRecentRepo(repo); // add to recent repos (localstorage)
         }
       }),
     [session, repo, setIsConfigDialogOpen, setIsValid, setConfig],

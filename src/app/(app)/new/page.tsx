@@ -1,5 +1,5 @@
-import { Construction } from 'lucide-react';
 import { Metadata } from 'next';
+import RecentRepoList from './_components/recent-repo-list';
 import RepoList from './_components/repo-list';
 
 export const metadata: Metadata = {
@@ -20,17 +20,9 @@ export default async function Page() {
           <h5 className="text-xl font-bold">Import Git Repo</h5>
           <RepoList />
         </div>
-        <div className="flex flex-col gap-4 rounded-lg border p-4">
-          <div>
-            <h5 className="text-xl font-bold">Clone Template</h5>
-            <span className="text-muted-foreground text-sm">
-              Clone from our starter collection.
-            </span>
-          </div>
-          <div className="flex flex-1 flex-col items-center justify-center gap-2">
-            <Construction className="text-muted-foreground size-10 stroke-1" />
-            <span className="text-muted-foreground text-sm">(Feature comin&apos; soon)</span>
-          </div>
+        <div className="space-y-4 rounded-lg border p-4">
+          <h5 className="text-xl font-bold">Recent Repos</h5>
+          <RecentRepoList />
         </div>
       </div>
     </div>
