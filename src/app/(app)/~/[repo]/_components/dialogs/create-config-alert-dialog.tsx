@@ -18,7 +18,7 @@ import { toast } from 'sonner';
 
 interface Props {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen: (val: boolean) => void;
   repo: string;
 }
 
