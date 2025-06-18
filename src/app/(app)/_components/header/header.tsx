@@ -39,8 +39,9 @@ export default function Header() {
         )}
       </nav>
       <div className="flex items-center gap-4">
-        <Button variant={'outline'}>
-          <MessageSquareQuote className="text-muted-foreground size-4" /> Feedback
+        <Button variant={'secondary'} className="text-muted-foreground">
+          <MessageSquareQuote className="size-4" />
+          <span>Feedback</span>
         </Button>
         <UserDropdown></UserDropdown>
       </div>
