@@ -13,7 +13,7 @@ export default function ComponentItem({ id, label, Icon }: Props) {
     id,
   });
 
-  const style = {
+  const style: React.CSSProperties = {
     transform: CSS.Translate.toString(transform),
     transition,
     zIndex: isDragging ? 1 : 0,
