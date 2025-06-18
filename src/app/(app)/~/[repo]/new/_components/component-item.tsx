@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
@@ -28,7 +29,13 @@ export default function ComponentItem({ id, label, Icon }: Props) {
     >
       <Icon className="text-muted-foreground size-5" />
       <span className="text-muted-foreground text-sm font-medium">{label}</span>
-      <GripVertical className="text-muted-foreground ml-auto size-5 stroke-[1.5]" {...listeners} />
+      <GripVertical
+        className={cn(
+          'text-muted-foreground ml-auto size-5 stroke-[1.5]',
+          isDragging ? 'cursor-grabbing' : 'cursor-grab',
+        )}
+        {...listeners}
+      />
     </div>
   );
 }

@@ -10,7 +10,9 @@ export default function Page() {
       <title>New</title>
       {/* rest of the layout */}
       <div className="grid h-full grid-cols-4 divide-x">
-        <Sidebar />
+        <div className="col-span-1">
+          <Sidebar />
+        </div>
         <Editor />
       </div>
     </>

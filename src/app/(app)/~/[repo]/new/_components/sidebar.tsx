@@ -26,7 +26,7 @@ export default function Sidebar() {
   return (
     <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={handleDragEnd}>
       <SortableContext items={activeFieldIds} strategy={verticalListSortingStrategy}>
-        <div className="col-span-1 flex flex-col gap-4 p-4">
+        <div className="sticky top-0 flex flex-col gap-4 p-4">
           <div className="flex flex-col">
             <h3 className="font-medium">Fields</h3>
             <span className="text-muted-foreground text-xs">Click on a field below to edit</span>
