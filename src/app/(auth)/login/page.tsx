@@ -1,6 +1,6 @@
 import { signIn } from '@/auth';
 import GitHubIcon from '@/components/icons/github';
-import GitlabIcon from '@/components/icons/gitlab';
+import GitLabIcon from '@/components/icons/gitlab';
 import GitLoomIcon from '@/components/icons/gitloom';
 import GitLoomTextIcon from '@/components/icons/gitloom-text';
 import { Button } from '@/components/ui/button';
@@ -53,13 +53,13 @@ export default async function Page() {
                 });
               }}
             >
-              <Button type="submit" size={'default'} className="w-full">
+              <Button type="submit" size={'md'} className="w-full">
                 <GitHubIcon className="size-5" />
                 Sign in with Github
               </Button>
             </form>
-            <Button size={'default'} variant={'secondary'} disabled>
-              <GitlabIcon className="fill-foreground size-5" />
+            <Button size={'md'} variant={'secondary'} disabled>
+              <GitLabIcon className="fill-foreground size-5" />
               Sign in with Gitlab
             </Button>
           </div>
