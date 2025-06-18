@@ -1,13 +1,5 @@
 import { TextCursorInput, Type } from 'lucide-react';
-
-export type ComponentsId = 'text' | 'slug';
-export type Components = Record<
-  ComponentsId,
-  {
-    label: string;
-    Icon: React.ComponentType<{ className: string }>;
-  }
->;
+import { Components } from './types';
 
 export const components: Components = {
   text: {

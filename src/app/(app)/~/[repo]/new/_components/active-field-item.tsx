@@ -9,13 +9,13 @@ interface Props {
   Icon: React.ComponentType<{ className: string }>;
 }
 
-export default function ComponentItem({ id, label, Icon }: Props) {
+export default function ActiveFieldItem({ id, label, Icon }: Props) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id,
   });
 
   const style: React.CSSProperties = {
-    transform: CSS.Translate.toString(transform),
+    transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? 1 : 0,
   };

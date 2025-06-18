@@ -1,20 +1,25 @@
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { useState } from 'react';
-import { type ComponentsId, components } from '../_constants/components';
-import ComponentItem from './component-item';
+import { nanoid } from 'nanoid';
+import { components } from '../_lib/constants';
+import { ActiveField, ComponentsId } from '../_lib/types';
+import ActiveFieldItem from './active-field-item';
+import FieldItem from './field-item';
 
-export default function Sidebar() {
-  const [activeFieldIds, setActiveFieldIds] = useState<Array<ComponentsId>>(['text', 'slug']);
+interface Props {
+  activeFields: ActiveField[];
+  setActiveFields: React.Dispatch<React.SetStateAction<ActiveField[]>>;
+}
 
+export default function Sidebar({ activeFields, setActiveFields }: Props) {
   function handleDragEnd(e: DragEndEvent) {
     const { active, over } = e;
 
     if (over && active.id !== over.id) {
-      setActiveFieldIds((items) => {
-        const oldIndex = items.indexOf(active.id as ComponentsId);
-        const newIndex = items.indexOf(over.id as ComponentsId);
+      setActiveFields((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
 
         const newArr = arrayMove(items, oldIndex, newIndex);
         console.log(newArr);
@@ -23,22 +28,35 @@ export default function Sidebar() {
     }
   }
 
+  function addField(componentId: string) {
+    setActiveFields((prev) => [...prev, { id: `${componentId}-${nanoid()}`, componentId }]);
+  }
+
   return (
-    <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={handleDragEnd}>
-      <SortableContext items={activeFieldIds} strategy={verticalListSortingStrategy}>
-        <div className="sticky top-0 flex flex-col gap-4 p-4">
+    <div className="sticky top-0 flex flex-col gap-4 p-4">
+      <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={handleDragEnd}>
+        <SortableContext items={activeFields} strategy={verticalListSortingStrategy}>
           <div className="flex flex-col">
             <h3 className="font-medium">Fields</h3>
             <span className="text-muted-foreground text-xs">Click on a field below to edit</span>
           </div>
           <div className="flex flex-col gap-2">
-            {activeFieldIds.map((id) => {
-              const { label, Icon } = components[id];
-              return <ComponentItem key={id} id={id} label={label} Icon={Icon} />;
+            {activeFields.map(({ id, componentId }) => {
+              const component = Object.keys(components).find((c) => c === componentId);
+              if (!component) return null;
+
+              const { label, Icon } = components[component as ComponentsId];
+              return <ActiveFieldItem key={id} id={id} label={label} Icon={Icon} />;
             })}
           </div>
-        </div>
-      </SortableContext>
-    </DndContext>
+        </SortableContext>
+      </DndContext>
+      <span className="text-muted-foreground text-xs">Click on a field below to add</span>
+      <div className="flex flex-col gap-2">
+        {Object.entries(components).map(([id, { label, Icon }]) => (
+          <FieldItem key={id} id={id} label={label} Icon={Icon} onClick={addField} />
+        ))}
+      </div>
+    </div>
   );
 }
