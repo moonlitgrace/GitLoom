@@ -1,8 +1,6 @@
-import { Button } from '@/components/ui/button';
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { Plus } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { components } from '../_lib/constants';
 import { ActiveField, ComponentsId } from '../_lib/types';
@@ -53,13 +51,7 @@ export default function Sidebar({ activeFields, setActiveFields }: Props) {
           </div>
         </SortableContext>
       </DndContext>
-      <div className="flex flex-col gap-2">
-        <span className="text-muted-foreground text-xs">Click on a field below to add</span>
-        <Button variant={'secondary'} disabled>
-          <Plus />
-          <span>Custom Field</span>
-        </Button>
-      </div>
+      <span className="text-muted-foreground text-xs">Click on a field below to add</span>
       <div className="flex flex-col gap-2">
         {Object.entries(components).map(([id, { label, Icon }]) => (
           <FieldItem
