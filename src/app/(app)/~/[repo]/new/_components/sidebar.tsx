@@ -28,7 +28,7 @@ export default function Sidebar({ activeFields, setActiveFields }: Props) {
     }
   }
 
-  function addField(componentId: string) {
+  function addField(componentId: ComponentsId) {
     setActiveFields((prev) => [...prev, { id: `${componentId}-${nanoid()}`, componentId }]);
   }
 
@@ -54,7 +54,13 @@ export default function Sidebar({ activeFields, setActiveFields }: Props) {
       <span className="text-muted-foreground text-xs">Click on a field below to add</span>
       <div className="flex flex-col gap-2">
         {Object.entries(components).map(([id, { label, Icon }]) => (
-          <FieldItem key={id} id={id} label={label} Icon={Icon} onClick={addField} />
+          <FieldItem
+            key={id}
+            id={id as ComponentsId}
+            label={label}
+            Icon={Icon}
+            addField={addField}
+          />
         ))}
       </div>
     </div>
