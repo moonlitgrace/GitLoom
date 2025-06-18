@@ -7,7 +7,7 @@ export const components: Components = {
     Icon: Type,
   },
   slug: {
-    label: 'Slug Input',
+    label: 'Slug',
     Icon: TextCursorInput,
   },
 } as const;

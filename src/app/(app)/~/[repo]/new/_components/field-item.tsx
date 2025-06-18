@@ -10,7 +10,7 @@ interface Props {
 export default function FieldItem({ id, label, Icon, addField }: Props) {
   return (
     <button
-      className="bg-secondary/50 hover:bg-secondary flex touch-none items-center gap-2 rounded-md p-2 transition-colors select-none"
+      className="hover:bg-secondary/50 flex touch-none items-center gap-2 rounded-md p-2 transition-colors select-none"
       onClick={() => addField(id)}
     >
       <Icon className="text-muted-foreground size-5" />
