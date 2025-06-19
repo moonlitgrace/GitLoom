@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { ActiveField } from '../types';
+import { ActiveField } from '../_types/field';
 
 export interface ActiveFieldContextValue {
   activeFields: ActiveField[];

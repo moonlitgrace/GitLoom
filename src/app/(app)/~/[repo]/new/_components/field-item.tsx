@@ -1,10 +1,10 @@
-import { ComponentsId } from '../types';
+import { FieldId } from '../_types/field';
 
 interface Props {
-  id: ComponentsId;
+  id: FieldId;
   label: string;
   Icon: React.ComponentType<{ className: string }>;
-  addField: (id: ComponentsId) => void;
+  addField: (id: FieldId) => void;
 }
 
 export default function FieldItem({ id, label, Icon, addField }: Props) {

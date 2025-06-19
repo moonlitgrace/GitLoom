@@ -1,7 +1,7 @@
 import { TextCursorInput, Type } from 'lucide-react';
-import { Components } from './types';
+import { Field } from './_types/field';
 
-export const components: Components = {
+export const FIELD: Field = {
   text: {
     label: 'Text Input',
     Icon: Type,

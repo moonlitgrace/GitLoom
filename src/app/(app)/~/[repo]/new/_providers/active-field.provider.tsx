@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import { ActiveFieldContext, ActiveFieldContextValue } from '../_contexts/active-field.context';
-import { ActiveField } from '../types';
+import { ActiveField } from '../_types/field';
 
 interface ActiveFieldProviderProps {
   children: React.ReactNode;
@@ -9,7 +9,7 @@ interface ActiveFieldProviderProps {
 
 export function ActiveFieldProvider({ children }: ActiveFieldProviderProps) {
   const [activeFields, setActiveFields] = useState<ActiveField[]>([
-    { id: `text-${nanoid()}`, componentId: 'text', key: '', value: '' },
+    { id: `text-${nanoid()}`, fieldId: 'text', key: '', value: '' },
   ]);
 
   const contextValue: ActiveFieldContextValue = {

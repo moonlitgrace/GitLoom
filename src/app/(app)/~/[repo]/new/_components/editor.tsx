@@ -1,5 +1,5 @@
 import { useActiveField } from '../_contexts/active-field.context';
-import { ComponentsId } from '../types';
+import { FieldId } from '../_types/field';
 import TextInput from './fields/text-input';
 
 export default function Editor() {
@@ -15,15 +15,15 @@ export default function Editor() {
       </div>
       <div className="flex flex-col gap-2">
         {activeFields.map((field) => (
-          <RenderField key={field.id} componentId={field.componentId} />
+          <RenderField key={field.id} fieldId={field.fieldId} />
         ))}
       </div>
     </div>
   );
 }
 
-function RenderField({ componentId }: { componentId: ComponentsId }) {
-  switch (componentId) {
+function RenderField({ fieldId }: { fieldId: FieldId }) {
+  switch (fieldId) {
     case 'text':
       return <TextInput />;
   }

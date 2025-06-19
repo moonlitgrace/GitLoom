@@ -3,8 +3,8 @@ import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { nanoid } from 'nanoid';
 import { useActiveField } from '../_contexts/active-field.context';
-import { components } from '../constants';
-import { ComponentsId } from '../types';
+import { FieldId } from '../_types/field';
+import { FIELD } from '../constants';
 import ActiveFieldItem from './active-field-item';
 import FieldItem from './field-item';
 
@@ -26,10 +26,10 @@ export default function Sidebar() {
     }
   }
 
-  function addField(componentId: ComponentsId) {
+  function addField(fieldId: FieldId) {
     setActiveFields((prev) => [
       ...prev,
-      { id: `${componentId}-${nanoid()}`, componentId, key: '', value: '' },
+      { id: `${fieldId}-${nanoid()}`, fieldId: fieldId, key: '', value: '' },
     ]);
   }
 
@@ -46,11 +46,11 @@ export default function Sidebar() {
             <span className="text-muted-foreground text-xs">Click on a field below to edit</span>
           </div>
           <div className="flex flex-col gap-2">
-            {activeFields.map(({ id, componentId }) => {
-              const component = Object.keys(components).find((c) => c === componentId);
+            {activeFields.map(({ id, fieldId: fieldId }) => {
+              const component = Object.keys(FIELD).find((c) => c === fieldId);
               if (!component) return null;
 
-              const { label, Icon } = components[component as ComponentsId];
+              const { label, Icon } = FIELD[component as FieldId];
               return (
                 <ActiveFieldItem
                   key={id}
@@ -66,14 +66,8 @@ export default function Sidebar() {
       </DndContext>
       <span className="text-muted-foreground text-xs">Click on a field below to add</span>
       <div className="flex flex-col gap-2">
-        {Object.entries(components).map(([id, { label, Icon }]) => (
-          <FieldItem
-            key={id}
-            id={id as ComponentsId}
-            label={label}
-            Icon={Icon}
-            addField={addField}
-          />
+        {Object.entries(FIELD).map(([id, { label, Icon }]) => (
+          <FieldItem key={id} id={id as FieldId} label={label} Icon={Icon} addField={addField} />
         ))}
       </div>
     </div>
