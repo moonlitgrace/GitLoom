@@ -1,4 +1,4 @@
-import { ComponentsId } from '../_types';
+import { ComponentsId } from '../types';
 
 interface Props {
   id: ComponentsId;

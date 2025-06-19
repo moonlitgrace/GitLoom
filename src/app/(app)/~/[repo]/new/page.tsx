@@ -2,7 +2,7 @@
 
 import Editor from './_components/editor';
 import Sidebar from './_components/sidebar';
-import { ActiveFieldProvider } from './_contexts/active-field.context';
+import { ActiveFieldProvider } from './_providers/active-field.provider';
 
 export default function Page() {
   return (

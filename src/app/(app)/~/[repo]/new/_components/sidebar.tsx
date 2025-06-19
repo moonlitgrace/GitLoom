@@ -2,9 +2,9 @@ import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { nanoid } from 'nanoid';
-import { components } from '../_constants';
 import { useActiveField } from '../_contexts/active-field.context';
-import { ComponentsId } from '../_types';
+import { components } from '../constants';
+import { ComponentsId } from '../types';
 import ActiveFieldItem from './active-field-item';
 import FieldItem from './field-item';
 

@@ -1,5 +1,5 @@
-import { useActiveField } from '../_hooks/use-active-field';
-import { ComponentsId } from '../_types';
+import { useActiveField } from '../_contexts/active-field.context';
+import { ComponentsId } from '../types';
 import TextInput from './fields/text-input';
 
 export default function Editor() {

@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
-import { ActiveField } from '../_types';
-import { ActiveFieldContext, ActiveFieldContextValue } from './active-field.context';
+import { ActiveFieldContext, ActiveFieldContextValue } from '../_contexts/active-field.context';
+import { ActiveField } from '../types';
 
 interface ActiveFieldProviderProps {
   children: React.ReactNode;
