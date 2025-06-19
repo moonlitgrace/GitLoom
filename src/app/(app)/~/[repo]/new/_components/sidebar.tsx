@@ -2,17 +2,15 @@ import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { nanoid } from 'nanoid';
-import { components } from '../_lib/constants';
-import { ActiveField, ComponentsId } from '../_lib/types';
+import { components } from '../_constants';
+import { useActiveField } from '../_hooks/use-active-field';
+import { ComponentsId } from '../_types';
 import ActiveFieldItem from './active-field-item';
 import FieldItem from './field-item';
 
-interface Props {
-  activeFields: ActiveField[];
-  setActiveFields: React.Dispatch<React.SetStateAction<ActiveField[]>>;
-}
+export default function Sidebar() {
+  const { activeFields, setActiveFields } = useActiveField();
 
-export default function Sidebar({ activeFields, setActiveFields }: Props) {
   function handleDragEnd(e: DragEndEvent) {
     const { active, over } = e;
 
@@ -29,7 +27,10 @@ export default function Sidebar({ activeFields, setActiveFields }: Props) {
   }
 
   function addField(componentId: ComponentsId) {
-    setActiveFields((prev) => [...prev, { id: `${componentId}-${nanoid()}`, componentId }]);
+    setActiveFields((prev) => [
+      ...prev,
+      { id: `${componentId}-${nanoid()}`, componentId, key: '', value: '' },
+    ]);
   }
 
   function deleteField(id: string) {

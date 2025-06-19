@@ -28,7 +28,7 @@ export default function ActiveFieldItem({ id, label, Icon, onDelete }: Props) {
       className="bg-secondary/50 group hover:bg-secondary flex touch-none items-center gap-2 rounded-md p-2 transition-colors select-none"
       {...attributes}
     >
-      <Icon className="text-muted-foreground size-5" />
+      <Icon className="text-muted-foreground size-4 shrink-0" />
       <span className="text-muted-foreground text-sm font-medium">{label}</span>
       <Trash
         className="text-destructive ml-auto size-4.5 opacity-0 transition-opacity group-hover:opacity-100"

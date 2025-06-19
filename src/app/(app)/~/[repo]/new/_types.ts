@@ -10,4 +10,6 @@ export type Components = Record<
 export interface ActiveField {
   id: string;
   componentId: ComponentsId;
+  key: string;
+  value: string;
 }

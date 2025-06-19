@@ -1,4 +1,4 @@
-import { ComponentsId } from '../_lib/types';
+import { ComponentsId } from '../_types';
 
 interface Props {
   id: ComponentsId;
@@ -13,7 +13,7 @@ export default function FieldItem({ id, label, Icon, addField }: Props) {
       className="hover:bg-secondary/50 flex touch-none items-center gap-2 rounded-md p-2 transition-colors select-none"
       onClick={() => addField(id)}
     >
-      <Icon className="text-muted-foreground size-5" />
+      <Icon className="text-muted-foreground size-4 shrink-0" />
       <span className="text-muted-foreground text-sm font-medium">{label}</span>
     </button>
   );

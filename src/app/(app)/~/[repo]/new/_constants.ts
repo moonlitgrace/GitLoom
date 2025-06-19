@@ -1,5 +1,5 @@
 import { TextCursorInput, Type } from 'lucide-react';
-import { Components } from './types';
+import { Components } from './_types';
 
 export const components: Components = {
   text: {
