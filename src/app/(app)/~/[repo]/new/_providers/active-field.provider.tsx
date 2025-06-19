@@ -9,7 +9,7 @@ interface ActiveFieldProviderProps {
 
 export function ActiveFieldProvider({ children }: ActiveFieldProviderProps) {
   const [activeFields, setActiveFields] = useState<ActiveField[]>([
-    { id: `text-${nanoid()}`, fieldId: 'text', key: '', value: '' },
+    { id: `text-${nanoid()}`, fieldId: 'text' },
   ]);
 
   const contextValue: ActiveFieldContextValue = {

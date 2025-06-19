@@ -8,10 +8,7 @@ export default function Sidebar() {
   const { setActiveFields } = useActiveField();
 
   function addField(fieldId: FieldId) {
-    setActiveFields((prev) => [
-      ...prev,
-      { id: `${fieldId}-${nanoid()}`, fieldId: fieldId, key: '', value: '' },
-    ]);
+    setActiveFields((prev) => [...prev, { id: `${fieldId}-${nanoid()}`, fieldId: fieldId }]);
   }
 
   return (
