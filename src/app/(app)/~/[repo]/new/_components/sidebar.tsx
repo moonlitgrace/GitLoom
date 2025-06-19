@@ -32,6 +32,10 @@ export default function Sidebar({ activeFields, setActiveFields }: Props) {
     setActiveFields((prev) => [...prev, { id: `${componentId}-${nanoid()}`, componentId }]);
   }
 
+  function deleteField(id: string) {
+    setActiveFields((prev) => prev.filter((p) => p.id !== id));
+  }
+
   return (
     <div className="sticky top-0 flex flex-col gap-4 p-4">
       <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={handleDragEnd}>
@@ -46,7 +50,15 @@ export default function Sidebar({ activeFields, setActiveFields }: Props) {
               if (!component) return null;
 
               const { label, Icon } = components[component as ComponentsId];
-              return <ActiveFieldItem key={id} id={id} label={label} Icon={Icon} />;
+              return (
+                <ActiveFieldItem
+                  key={id}
+                  id={id}
+                  label={label}
+                  Icon={Icon}
+                  onDelete={deleteField}
+                />
+              );
             })}
           </div>
         </SortableContext>
