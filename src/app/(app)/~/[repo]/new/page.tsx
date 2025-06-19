@@ -2,17 +2,17 @@
 
 import Editor from './_components/editor';
 import Sidebar from './_components/sidebar';
-import { FieldProvider } from './_providers/active-field-provider';
+import { ActiveFieldProvider } from './_contexts/active-field';
 
 export default function Page() {
   return (
     <div className="grid h-full grid-cols-4 divide-x">
-      <FieldProvider>
+      <ActiveFieldProvider>
         <div className="col-span-1">
           <Sidebar />
         </div>
         <Editor />
-      </FieldProvider>
+      </ActiveFieldProvider>
     </div>
   );
 }
