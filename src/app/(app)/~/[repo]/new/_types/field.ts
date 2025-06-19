@@ -10,6 +10,6 @@ export type Field = Record<
 export interface ActiveField {
   id: string;
   fieldId: FieldId;
-  key: string;
-  value: string;
+  key?: string;
+  value?: string;
 }
