@@ -1,4 +1,4 @@
-export type FieldId = 'text' | 'slug';
+export type FieldId = 'text' | 'auto_populate';
 export type Field = Record<
   FieldId,
   {
