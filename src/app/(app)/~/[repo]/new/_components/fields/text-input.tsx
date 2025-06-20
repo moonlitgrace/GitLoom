@@ -10,26 +10,12 @@ interface Props {
 }
 
 export default function TextInput({ id, gripProps }: Props) {
-  const { activeFields, setActiveFields } = useActiveField();
+  const { activeFields, changeField, deleteField, resetField } = useActiveField();
   const field = activeFields.find((field) => field.id === id);
 
   if (!field) {
     console.error(`Field not found with id: ${id}`);
     return null;
-  }
-
-  function handleDelete() {
-    setActiveFields((prev) => prev.filter((f) => f.id !== id));
-  }
-
-  function handleReset() {
-    setActiveFields((prev) =>
-      prev.map((f) => (f.id === id ? { ...f, key: undefined, value: undefined } : f)),
-    );
-  }
-
-  function handleChange(type: 'key' | 'value', value: string) {
-    setActiveFields((prev) => prev.map((f) => (f.id === id ? { ...f, [type]: value } : f)));
   }
 
   return (
@@ -39,20 +25,20 @@ export default function TextInput({ id, gripProps }: Props) {
         placeholder="key"
         className="focus:border-border! border-border/25 w-50 shrink-0"
         value={field.key ?? ''}
-        onChange={(e) => handleChange('key', e.target.value)}
+        onChange={(e) => changeField(id, 'key', e.target.value)}
       />
       <span className="text-muted-foreground text-sm select-none">:</span>
       <Input
         placeholder="value"
         className="focus:border-border! border-border/25"
         value={field.value ?? ''}
-        onChange={(e) => handleChange('value', e.target.value)}
+        onChange={(e) => changeField(id, 'value', e.target.value)}
       />
       <div className="flex items-center gap-1">
-        <Button size={'icon'} variant={'ghost'} onClick={handleReset}>
+        <Button size={'icon'} variant={'ghost'} onClick={() => resetField(id)}>
           <RotateCcw className="text-muted-foreground size-4 shrink-0" />
         </Button>
-        <Button size={'icon'} variant={'ghost'} onClick={handleDelete}>
+        <Button size={'icon'} variant={'ghost'} onClick={() => deleteField(id)}>
           <Trash className="text-destructive size-4 shrink-0" />
         </Button>
         {gripProps && (

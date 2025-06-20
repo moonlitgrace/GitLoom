@@ -4,6 +4,10 @@ import { ActiveField } from '../_types/field';
 export interface ActiveFieldContextValue {
   activeFields: ActiveField[];
   setActiveFields: React.Dispatch<React.SetStateAction<ActiveField[]>>;
+  deleteField: (id: string) => void;
+  addField: (props: Omit<ActiveField, 'id'>) => void;
+  changeField: (id: string, type: 'key' | 'value', value: string) => void;
+  resetField: (id: string) => void;
 }
 
 export const ActiveFieldContext = createContext<ActiveFieldContextValue | null>(null);
