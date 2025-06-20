@@ -1,4 +1,4 @@
-import { TextCursorInput, Type } from 'lucide-react';
+import { Type, Workflow } from 'lucide-react';
 import { Field } from './_types/field';
 
 export const FIELD: Field = {
@@ -7,7 +7,7 @@ export const FIELD: Field = {
     Icon: Type,
   },
   slug: {
-    label: 'Slug',
-    Icon: TextCursorInput,
+    label: 'Auto Populate',
+    Icon: Workflow,
   },
 } as const;
