@@ -6,7 +6,7 @@ export const FIELD: Field = {
     label: 'Text Input',
     Icon: Type,
   },
-  slug: {
+  auto_populate: {
     label: 'Auto Populate',
     Icon: Workflow,
   },
